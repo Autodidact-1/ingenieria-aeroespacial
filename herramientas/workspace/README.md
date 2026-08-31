@@ -1,4 +1,4 @@
-# Aula · Ingeniería Aeroespacial UNLP
+# Ingeniería Aeroespacial
 
 Interfaz local para administrar todo el material de la carrera: carpetas de
 asignaturas, apuntes, prácticas, libros, mapas conceptuales y la red de
@@ -27,10 +27,10 @@ la estructura del plan de estudios, pero las carpetas figuran vacías.
 | Sección | Qué hace |
 |---|---|
 | **Explorador** | Árbol semestre → asignatura → `material/` `apuntes/` `practica/` → archivos, sobre las carpetas reales. Doble clic (o clic derecho) en una asignatura abre su ficha. |
-| **Red de correlativas** | Embebe `00 - general/correlativas/red_correlativas_aeroespacial.html` sin modificarlo. |
+| **Red de asignaturas** | Columnas por semestre con las flechas de correlatividad, a todo el ancho y sin panel lateral. Vive dentro de esta misma página: no hay archivo aparte ni iframe. Al abrirla recorre las columnas hasta el semestre en curso; escala, modo desbloqueo y exportación se manejan desde Configuración. |
 | **Mapas conceptuales** | Mapa inter-asignaturas por área temática, e índice de qué materias ya tienen mapa. |
-| **Librería** | Libros locales indexados desde las carpetas `material/`, bibliografía recomendada por materia y búsqueda en el catálogo abierto de Open Library. |
-| **Configuración** | Tema, tipografía, ancho del panel, estado del servidor, índices y exportar/importar el progreso. |
+| **Librería** | Libros locales indexados desde `Asignaturas/Libreria/` (la carpeta única de bibliografía, que también aparece arriba del árbol del Explorador), bibliografía recomendada por materia y búsqueda en el catálogo abierto de Open Library. |
+| **Configuración** | Tema, tipografía, ancho del panel, animaciones, escala y modo desbloqueo de la Red de asignaturas, estado del servidor, índices y exportar/importar el progreso. |
 
 ## Qué archivos sabe mostrar
 
@@ -74,19 +74,20 @@ LaTeX en monoespaciado, que es como se veía antes.
 |---|---|
 | `Ctrl+P` | buscar archivo, asignatura o vista |
 | `Ctrl+1…5` | cambiar de sección |
-| `Ctrl+B` | plegar la barra lateral |
-| `Ctrl+W` | cerrar la pestaña activa |
+| `Ctrl+B` | plegar la barra lateral (Librería y Configuración no la tienen) |
+| `Ctrl+W` | cerrar la vista actual y volver al inicio |
 
 ## Temas de color
 
-Hay 13 paletas, elegibles desde Configuración con una miniatura de cada una:
-**Papel nocturno** (el original), **Papel claro**, **Hangar**, **Vuelo nocturno**,
-**Nebulosa**, **Cabina**, **Altímetro**, **Nórdico**, **Plano técnico**,
-**Solarizado oscuro**, **Solarizado claro**, **Amanecer** y **Alto contraste**.
+Hay 15 paletas, elegibles desde Configuración con una miniatura de cada una:
+**Windows 11** (el tema por defecto), **Papel nocturno** (el original), **Papel claro**,
+**Hangar**, **Vuelo nocturno**, **Nebulosa**, **Cabina**, **Altímetro**, **Nórdico**,
+**Plano técnico**, **Solarizado oscuro**, **Solarizado claro**, **Amanecer**,
+**Alto contraste** y **Carmesí**.
 
-El tema alcanza también a la red de correlativas embebida: como se sirve desde el
-mismo origen, la interfaz le inyecta sus variables CSS y la red se repinta sin que
-haya que tocar `red_correlativas_aeroespacial.html`.
+El tema alcanza también a la Red de asignaturas: es una vista más de la interfaz
+y usa los mismos tokens, así que se repinta sola. La copia que exportás desde
+Configuración se lleva los colores del tema que tengas puesto en ese momento.
 
 Cada tema es un bloque `html[data-theme="id"]` en `index.html` que redefine las
 mismas ~19 variables, y una entrada en `THEMES` dentro de `data.js` con el nombre

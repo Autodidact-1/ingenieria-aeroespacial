@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "workspace-app",
+      "runtimeExecutable": "C:\\Users\\RimyAlbertOrtega\\Documents\\Proyectos\\ingenieria-aeroespacial\\dev-workspace-app.cmd",
+      "runtimeArgs": [],
+      "port": 5173
+    }
+  ]
+}

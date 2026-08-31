@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Red de Correlativas · Ingeniería Aeroespacial UNLP</title>
+<title>Red de asignaturas · Ingeniería Aeroespacial UNLP</title>
 <style>
   :root{
     --bg:#252220;
@@ -25,15 +25,25 @@
 
     --prereq:#DD7B5C;
     --unlocks:#7FB584;
-    --passed-bg:#3B3226;
+    --ink-dim:#6F675C;
+
+    /* Texto legible sobre cada color plano. La interfaz los recalcula por tema
+       al embeber esta página; los valores de acá son el respaldo al abrirla sola. */
+    --on-accent:#1E1B18; --on-cb:#1E1B18; --on-tb:#1E1B18;
+    --on-ta:#1E1B18; --on-co:#1E1B18;
+
+    --sans:"Segoe UI Variable Text","Segoe UI",ui-sans-serif,system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Iowan Old Style",ui-serif,Georgia,"Palatino Linotype",serif;
+    --mono:"Cascadia Code","JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
 
   body{
-    font-family: ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-family: var(--sans);
+    -webkit-font-smoothing:antialiased;
     background:
-      radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px) 0 0/22px 22px,
+      radial-gradient(var(--border-soft) 1px, transparent 1px) 0 0/22px 22px,
       var(--bg);
     color: var(--ink);
     min-height: 100vh;
@@ -42,73 +52,88 @@
     overflow-x:hidden;
   }
 
-  h1, h4 { font-family: ui-serif, Georgia, "Iowan Old Style", "Palatino Linotype", serif; }
+  h1, h4 { font-family: var(--serif); letter-spacing:-0.011em; }
+
+  ::-webkit-scrollbar{ width:10px; height:10px }
+  ::-webkit-scrollbar-thumb{ background:var(--border); border-radius:999px;
+    border:2px solid transparent; background-clip:content-box }
+  ::-webkit-scrollbar-thumb:hover{ background:var(--ink-dim); background-clip:content-box }
+  ::-webkit-scrollbar-track{ background:transparent }
+  ::selection{ background:var(--accent-soft); color:var(--ink) }
 
   header{
     background: var(--paper);
     border-bottom: 1px solid var(--border);
-    padding: 1.1rem 2rem;
+    padding: 0.5rem 1.25rem;
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
-    gap:1rem;
+    gap:0.75rem;
     position: sticky;
     top:0;
     z-index: 20;
   }
 
-  .title-area h1{ font-size:1.5rem; font-weight:600; color:var(--ink); letter-spacing:-0.01em; }
-  .title-area p{ font-size:0.82rem; color:var(--ink-muted); margin-top:0.15rem; letter-spacing:0.02em; }
+  /* Título y subtítulo en una sola línea: el encabezado es una barra, no una portada. */
+  .title-area{ display:flex; align-items:baseline; gap:0.6rem; flex-wrap:wrap; min-width:0; }
+  .title-area h1{ font-size:1rem; font-weight:600; color:var(--ink); letter-spacing:-0.01em; }
+  .title-area p{ font-size:0.7rem; color:var(--ink-muted); letter-spacing:0.02em; }
 
-  .stats-bar{ display:flex; gap:1.75rem; }
-  .stat-item{ display:flex; flex-direction:column; align-items:center; min-width:64px; }
-  .stat-value{ font-family: ui-serif, Georgia, serif; font-size:1.15rem; font-weight:600; color: var(--accent-dark); }
-  .stat-label{ font-size:0.65rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.06em; margin-top:2px; }
+  .stats-bar{ display:flex; gap:1.1rem; }
+  .stat-item{ display:flex; flex-direction:column; align-items:center; min-width:56px; }
+  .stat-value{ font-family: var(--serif); font-size:0.9rem; font-weight:600;
+    color: var(--accent-dark); font-variant-numeric: tabular-nums; line-height:1.2; }
+  .stat-label{ font-size:0.56rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.07em; margin-top:1px; }
 
   .progress-track{
-    width: 130px; height:5px; border-radius:99px; background: var(--border-soft);
-    overflow:hidden; margin-top:6px;
+    width: 6rem; height:0.25rem; border-radius:99px; background: var(--border-soft);
+    overflow:hidden; margin-top:4px;
   }
   .progress-fill{ height:100%; background: var(--accent); border-radius:99px; transition: width .4s ease; width:0%; }
-
-  .controls{ display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap; }
-  .save-status{
-    font-size:0.75rem; color:var(--ink-muted); min-width:118px;
-    letter-spacing:0.02em; transition: color .2s ease;
-  }
-  .save-status.ok{ color: var(--unlocks); }
-  .save-status.warn{ color: var(--accent-dark); }
 
   .legend{
     display:flex;
     align-items:center;
-    gap:1.4rem;
-    padding: 0.7rem 2rem;
+    gap:1rem;
+    padding: 0.4rem 1.25rem;
     background: var(--panel);
     border-bottom: 1px solid var(--border-soft);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     color: var(--ink);
     flex-wrap:wrap;
   }
-  .legend-item{ display:flex; align-items:center; gap:0.4rem; }
-  .legend-dot{ width:10px; height:10px; border-radius:3px; }
-  .legend-hint{ margin-left:auto; color:var(--ink-muted); }
+  .legend-item{ display:flex; align-items:center; gap:0.35rem; }
+  .legend-dot{ width:0.56rem; height:0.56rem; border-radius:3px; }
+  .legend-hint{ margin-left:auto; color:var(--ink-muted); font-size:0.66rem; }
 
-  .main-container{ position:relative; flex:1; overflow:auto; padding: 2.25rem 2rem; }
+  .main-container{ position:relative; flex:1; overflow:auto; padding: 1.1rem 1.25rem; }
 
   svg#lines-layer{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
 
-  .grid-layout{ display:flex; gap:2rem; position:relative; z-index:2; min-width:max-content; }
-  .semester-column{ display:flex; flex-direction:column; gap:1rem; width:216px; }
+  .grid-layout{ display:flex; gap:1.5rem; position:relative; z-index:2; min-width:max-content; }
+  .semester-column{ display:flex; flex-direction:column; gap:0.6rem; width:12.25rem; position:relative; }
+  /* Bloque vertical que se enciende al recorrer los semestres. Va detrás de las
+     tarjetas porque ellas también están posicionadas y se pintan después. */
+  .semester-column::before{
+    content:""; position:absolute; inset:-0.45rem -0.4rem; border-radius:0.9rem;
+    background: var(--accent); opacity:0; pointer-events:none;
+  }
+  .semester-column.lit::before{ animation: semLit .7s ease-out; }
+  @keyframes semLit{ 0%{opacity:0} 22%{opacity:.24} 100%{opacity:0} }
+  .semester-column.lit .semester-header{ animation: semLitHead .7s ease-out; }
+  @keyframes semLitHead{
+    0%,100%{ border-color:var(--border); color:var(--ink) }
+    22%{ border-color:var(--accent); color:var(--accent-dark) }
+  }
 
   .semester-header{
     text-align:center;
-    padding: 0.4rem 0.5rem;
+    padding: 0.3rem 0.5rem;
     background: var(--paper);
     border: 1px solid var(--border);
     border-radius: 999px;
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight:600;
     color: var(--ink);
     letter-spacing: 0.01em;
@@ -118,10 +143,12 @@
     background: var(--paper);
     border: 1px solid var(--border);
     border-left: 4px solid var(--ta);
-    border-radius: 12px;
-    padding: 0.7rem 0.8rem;
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.6rem;
     cursor:pointer;
-    transition: all .2s ease;
+    transition: transform .2s cubic-bezier(.2,.6,.3,1),
+                box-shadow .2s cubic-bezier(.2,.6,.3,1),
+                border-color .2s cubic-bezier(.2,.6,.3,1);
     position:relative;
     user-select:none;
   }
@@ -132,37 +159,38 @@
   .card.type-TA{ border-left-color: var(--ta); }
   .card.type-CO{ border-left-color: var(--co); }
 
-  .card-code{ font-size:0.68rem; font-weight:600; color:var(--ink-muted); display:flex; justify-content:space-between; margin-bottom:0.3rem; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
-  .type-chip{ padding: 0 0.35rem; border-radius:4px; font-weight:700; color:#1E1B18; }
-  .type-CB .type-chip{ background: var(--cb); }
-  .type-TB .type-chip{ background: var(--tb); }
-  .type-TA .type-chip{ background: var(--ta); }
-  .type-CO .type-chip{ background: var(--co); }
+  .card-code{ font-size:0.63rem; font-weight:600; color:var(--ink-muted); display:flex; justify-content:space-between; margin-bottom:0.3rem; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .type-chip{ padding: 0 0.35rem; border-radius:4px; font-weight:700; letter-spacing:0.04em; }
+  .type-CB .type-chip{ background: var(--cb); color: var(--on-cb); }
+  .type-TB .type-chip{ background: var(--tb); color: var(--on-tb); }
+  .type-TA .type-chip{ background: var(--ta); color: var(--on-ta); }
+  .type-CO .type-chip{ background: var(--co); color: var(--on-co); }
 
-  .card-title{ font-family: ui-serif, Georgia, serif; font-size:0.86rem; font-weight:600; line-height:1.25; margin-bottom:0.4rem; color:var(--ink); }
-  .card-meta{ font-size:0.68rem; color:var(--ink-muted); display:flex; gap:0.5rem; flex-wrap:wrap; }
+  .card-title{ font-family: var(--serif); font-size:0.8rem; font-weight:600; line-height:1.22; margin-bottom:0.3rem; color:var(--ink); }
+  .card-meta{ font-size:0.63rem; color:var(--ink-muted); display:flex; gap:0.5rem; flex-wrap:wrap; }
   .card-meta .req{ color: var(--accent-dark); font-weight:600; }
 
-  .card.passed{ background: var(--passed-bg); }
   .card.passed::after{
     content:'✓';
-    position:absolute; top:-7px; right:-7px;
-    width:20px; height:20px; border-radius:50%;
-    background: var(--accent); color:#1E1B18;
+    position:absolute; top:-0.4rem; right:-0.4rem;
+    width:1.2rem; height:1.2rem; border-radius:50%;
+    background: var(--accent); color: var(--on-accent);
     font-size:0.72rem; font-weight:700;
     display:flex; align-items:center; justify-content:center;
     box-shadow: 0 2px 6px rgba(0,0,0,0.4);
   }
 
   .card.highlight-target{ border-color: var(--accent) !important; box-shadow: 0 0 0 3px var(--accent-soft); transform: scale(1.03); z-index:5; }
-  .card.highlight-prereq{ border-color: var(--prereq) !important; box-shadow: 0 0 0 3px rgba(177,74,52,0.14); z-index:4; }
-  .card.highlight-unlocks{ border-color: var(--unlocks) !important; box-shadow: 0 0 0 3px rgba(79,122,85,0.14); z-index:4; }
+  .card.highlight-prereq{ border-color: var(--prereq) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--prereq) 22%, transparent); z-index:4; }
+  .card.highlight-unlocks{ border-color: var(--unlocks) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--unlocks) 22%, transparent); z-index:4; }
   .card.dimmed{ opacity:0.3; filter: grayscale(50%); }
 
   /* --- Indicador de mapa conceptual --- */
   .map-badge{
-    position:absolute; top:-7px; left:-7px;
-    width:20px; height:20px; border-radius:50%;
+    position:absolute; top:-0.4rem; left:-0.4rem;
+    width:1.2rem; height:1.2rem; border-radius:50%;
     background: var(--panel); border:1px solid var(--border);
     display:flex; align-items:center; justify-content:center;
     font-size:0.62rem; line-height:1; cursor:pointer;
@@ -172,17 +200,17 @@
     transition: all .15s ease;
   }
   .map-badge:hover{ transform: scale(1.15); border-color: var(--accent-dark); }
-  .card.has-map .map-badge{ background: var(--cb); border-color: var(--cb); color:#1E1B18; }
+  .card.has-map .map-badge{ background: var(--cb); border-color: var(--cb); color: var(--on-cb); }
 
   .map-popover{
     position:fixed; z-index:100; display:none;
     background: var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:0.85rem 0.95rem; width:250px;
+    padding:0.85rem 0.95rem; width:15.5rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     font-size:0.76rem;
   }
   .map-popover.open{ display:block; }
-  .map-popover h5{ font-size:0.8rem; margin-bottom:0.55rem; color:var(--ink); font-family: ui-serif, Georgia, serif; }
+  .map-popover h5{ font-size:0.8rem; margin-bottom:0.55rem; color:var(--ink); font-family: var(--serif); }
   .map-popover label{ display:flex; align-items:center; gap:0.4rem; margin-bottom:0.6rem; cursor:pointer; color:var(--ink-muted); }
   .map-popover input[type="checkbox"]{ accent-color: var(--cb); width:14px; height:14px; }
   .map-popover input[type="text"]{
@@ -195,7 +223,7 @@
     flex:1; border:1px solid var(--border); background: var(--bg); color:var(--ink);
     padding:0.4rem 0.5rem; border-radius:6px; cursor:pointer; font-size:0.7rem;
   }
-  .map-popover button.primary{ background: var(--cb); color:#1E1B18; border-color:var(--cb); font-weight:600; }
+  .map-popover button.primary{ background: var(--cb); color: var(--on-cb); border-color:var(--cb); font-weight:600; }
   .map-popover button:hover{ filter: brightness(1.1); }
   .map-popover .toast{ font-size:0.68rem; color: var(--unlocks); margin-top:0.4rem; display:none; }
   .map-popover .toast.show{ display:block; }
@@ -222,13 +250,54 @@
   .tooltip .none{ color: var(--ink-muted); }
   .tooltip .prereq-line{ color: var(--prereq); }
   .tooltip .unlocks-line{ color: var(--unlocks); }
+
+  /* --- Modo desbloqueo: la materia que todavía no podés cursar viene tapada --- */
+  .lock-face{
+    position:absolute; inset:0; border-radius:inherit;
+    background:#0B0B0B; display:none; z-index:3;
+    flex-direction:column; align-items:center; justify-content:center; gap:0.3rem;
+  }
+  .card.locked .lock-face{ display:flex; }
+  .card.locked{ cursor:default; border-left-color:#0B0B0B; }
+  .card.locked:hover{ transform:none; box-shadow:none; border-color:var(--border); }
+  .card.locked .map-badge{ display:none; }
+  .lock-ico{ font-size:1.05rem; line-height:1; filter:grayscale(1); opacity:.75; }
+  .lock-keys{
+    font-family: var(--mono); font-size:0.58rem; color:#8A8A8A;
+    letter-spacing:0.04em; text-align:center; padding:0 0.4rem; line-height:1.45;
+  }
+  /* Al apuntar la materia que las habilita, las bloqueadas se ponen en blanco. */
+  .card.locked.will-unlock{
+    border-color:#FFFFFF !important; border-left-color:#FFFFFF !important;
+    background:#FFFFFF;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.22), 0 6px 18px rgba(0,0,0,0.4) !important;
+    opacity:1 !important; filter:none !important; z-index:6;
+  }
+  .card.locked.will-unlock .lock-face{ background:#FFFFFF; }
+  .card.locked.will-unlock .lock-keys{ color:#3A3A3A; }
+  .card.locked.will-unlock .lock-ico{ filter:none; opacity:1; }
+
+  @keyframes cardFlip{ 0%{transform:rotateY(0)} 50%{transform:rotateY(90deg)} 100%{transform:rotateY(0)} }
+  .card.flipping{ animation: cardFlip .56s ease-in-out; z-index:7; }
+
+  /* Interruptor global de animaciones (Configuración). */
+  html.no-anim *, html.no-anim *::before, html.no-anim *::after{
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{ transition-duration:.01ms !important; animation-duration:.01ms !important; }
+    .card:hover{ transform:none }
+    .card.highlight-target{ transform:none }
+  }
 </style>
 </head>
 <body>
 
 <header>
   <div class="title-area">
-    <h1>Red de Correlativas</h1>
+    <h1>Red de asignaturas</h1>
     <p>Ingeniería Aeroespacial — Universidad Nacional de La Plata, Plan 2018</p>
   </div>
 
@@ -250,10 +319,6 @@
       <span class="stat-label">Avance</span>
       <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
     </div>
-  </div>
-
-  <div class="controls">
-    <span class="save-status" id="save-status">Guardado automático</span>
   </div>
 </header>
 
@@ -288,9 +353,24 @@
 const subjectsData = [{"code": "D1001", "name": "Matemática Para Ingeniería", "type": "CB", "sem": 0, "hes": 25, "het": 125, "hfp": 0, "prereqs": []}, {"code": "F1301", "name": "Matemática A", "type": "CB", "sem": 1, "hes": 12, "het": 192, "hfp": 0, "prereqs": ["D1001"]}, {"code": "M1602", "name": "Gráfica para Ingeniería", "type": "CB", "sem": 1, "hes": 6, "het": 96, "hfp": 0, "prereqs": []}, {"code": "A1101", "name": "Introducción a la Ingeniería Aeroespacial", "type": "CO", "sem": 1, "hes": 3, "het": 48, "hfp": 0, "prereqs": []}, {"code": "F1302", "name": "Matemática B", "type": "CB", "sem": 2, "hes": 12, "het": 192, "hfp": 0, "prereqs": ["F1301"]}, {"code": "F1303", "name": "Física I", "type": "CB", "sem": 2, "hes": 8, "het": 128, "hfp": 16, "prereqs": ["F1301"]}, {"code": "U1901", "name": "Química para Ingeniería", "type": "CB", "sem": 2, "hes": 6, "het": 96, "hfp": 24, "prereqs": []}, {"code": "F1304", "name": "Matemática C", "type": "CB", "sem": 3, "hes": 9, "het": 144, "hfp": 0, "prereqs": ["F1302"]}, {"code": "F1305", "name": "Física II", "type": "CB", "sem": 3, "hes": 8, "het": 128, "hfp": 16, "prereqs": ["F1302", "F1303"]}, {"code": "F1315", "name": "Probabilidades y Estadística", "type": "CB", "sem": 3, "hes": 6, "het": 96, "hfp": 0, "prereqs": ["F1302"]}, {"code": "F1306", "name": "Matemática D", "type": "CB", "sem": 4, "hes": 6, "het": 96, "hfp": 0, "prereqs": ["F1304"]}, {"code": "F1316", "name": "Introducción a la Programación y Análisis Numérico", "type": "CB", "sem": 4, "hes": 5, "het": 80, "hfp": 0, "prereqs": ["F1304"]}, {"code": "C1151", "name": "Estructuras I", "type": "TB", "sem": 4, "hes": 6, "het": 96, "hfp": 24, "prereqs": ["F1303"]}, {"code": "M1603", "name": "Materiales", "type": "TB", "sem": 4, "hes": 5, "het": 80, "hfp": 32, "prereqs": ["U1901"]}, {"code": "A1102", "name": "Materiales Aeroespaciales", "type": "TB", "sem": 5, "hes": 5, "het": 40, "hfp": 10, "prereqs": ["M1603"]}, {"code": "A1006", "name": "Ensayos no Destructivos", "type": "TB", "sem": 5, "hes": 5, "het": 40, "hfp": 10, "prereqs": ["M1603", "F1305"]}, {"code": "M1604", "name": "Termodinámica", "type": "TB", "sem": 5, "hes": 6, "het": 96, "hfp": 10, "prereqs": ["F1302", "F1303", "U1901"]}, {"code": "C1153", "name": "Estructuras II", "type": "TB", "sem": 5, "hes": 6, "het": 96, "hfp": 24, "prereqs": ["C1151", "F1302", "M1603"]}, {"code": "A1009", "name": "Mecánica Racional", "type": "TB", "sem": 5, "hes": 6, "het": 96, "hfp": 0, "prereqs": ["F1303", "F1304"]}, {"code": "A1010", "name": "Electrotecnia y Sistemas Eléctricos de Aeronaves", "type": "TB", "sem": 6, "hes": 6, "het": 96, "hfp": 12, "prereqs": ["F1304", "F1305"]}, {"code": "A1011", "name": "Mecánica de los Fluidos I", "type": "TB", "sem": 6, "hes": 6, "het": 96, "hfp": 14, "prereqs": ["F1306", "F1316", "M1604"]}, {"code": "A1016", "name": "Mecanismos y Sistemas de Aeronaves", "type": "TA", "sem": 6, "hes": 6, "het": 96, "hfp": 0, "prereqs": ["A1009", "C1153", "M1603"]}, {"code": "A1008", "name": "Estructuras III", "type": "TA", "sem": 6, "hes": 6, "het": 96, "hfp": 24, "prereqs": ["C1153", "F1316"]}, {"code": "DA200", "name": "Actividad Formación Comp. I", "type": "CO", "sem": 6, "hes": 0, "het": 0, "hfp": 0, "prereqs": [], "req_approved": 10}, {"code": "A1013", "name": "Estructuras IV", "type": "TA", "sem": 7, "hes": 5, "het": 80, "hfp": 40, "prereqs": ["A1102", "A1008"]}, {"code": "A1015", "name": "Mecánica de los Fluidos II", "type": "TB", "sem": 7, "hes": 6, "het": 96, "hfp": 34, "prereqs": ["A1011", "F1315"]}, {"code": "A1012", "name": "Sistemas Dinámicos", "type": "TA", "sem": 7, "hes": 5, "het": 80, "hfp": 10, "prereqs": ["F1305", "F1315", "A1009", "A1008"]}, {"code": "P1752", "name": "Economía para Ingenieros y Org. Ind.", "type": "CO", "sem": 7, "hes": 3, "het": 48, "hfp": 0, "prereqs": [], "req_approved": 15}, {"code": "S0001", "name": "Electiva Humanística", "type": "CO", "sem": 7, "hes": 3, "het": 48, "hfp": 0, "prereqs": [], "req_approved": 15}, {"code": "DA300", "name": "Actividad Formación Comp. II", "type": "CO", "sem": 7, "hes": 0, "het": 0, "hfp": 0, "prereqs": ["DA200"]}, {"code": "A1017", "name": "Motores a Reacción", "type": "TA", "sem": 8, "hes": 5, "het": 80, "hfp": 20, "prereqs": ["A1015"]}, {"code": "A1018", "name": "Aerodinámica y Mecánica de Vuelo I", "type": "TA", "sem": 8, "hes": 6, "het": 96, "hfp": 70, "prereqs": ["A1015", "A1009"]}, {"code": "A1019", "name": "Procesos de Fabricación", "type": "TA", "sem": 8, "hes": 5, "het": 80, "hfp": 40, "prereqs": ["A1102"]}, {"code": "A1014", "name": "Estructuras V", "type": "TA", "sem": 8, "hes": 5, "het": 80, "hfp": 40, "prereqs": ["A1013"]}, {"code": "P1759", "name": "Ingeniería Legal y Ejercicio Profesional", "type": "CO", "sem": 8, "hes": 3, "het": 48, "hfp": 0, "prereqs": [], "req_approved": 20}, {"code": "DA400", "name": "Actividad Formación Comp. III", "type": "CO", "sem": 8, "hes": 0, "het": 0, "hfp": 0, "prereqs": ["DA300"]}, {"code": "A1020", "name": "Motores Alternativos", "type": "TA", "sem": 9, "hes": 5, "het": 80, "hfp": 20, "prereqs": ["A1012", "A1016", "M1604"]}, {"code": "A1022", "name": "Aerodinámica y Mecánica de Vuelo II", "type": "TA", "sem": 9, "hes": 6, "het": 96, "hfp": 70, "prereqs": ["A1018", "A1012"]}, {"code": "A1021", "name": "Mediciones e Instrumentos de Aeronaves", "type": "TA", "sem": 9, "hes": 6, "het": 96, "hfp": 34, "prereqs": ["A1010", "A1016"]}, {"code": "A1028", "name": "Aeropuertos y Operaciones de Vuelo", "type": "TA", "sem": 9, "hes": 6, "het": 96, "hfp": 50, "prereqs": ["A1018", "A1017"]}, {"code": "DA500", "name": "Actividad Formación Comp. IV", "type": "CO", "sem": 9, "hes": 0, "het": 0, "hfp": 0, "prereqs": ["DA400"]}, {"code": "A1023", "name": "Control y Guiado", "type": "TA", "sem": 10, "hes": 5, "het": 80, "hfp": 42, "prereqs": ["A1012", "A1021"]}, {"code": "A1024", "name": "Talleres y Mantenimiento Aeronáutico", "type": "TA", "sem": 10, "hes": 6, "het": 96, "hfp": 32, "prereqs": ["A1022"], "req_approved": 30}, {"code": "A1026", "name": "Sistemas y Equipos de Aeronaves", "type": "TA", "sem": 10, "hes": 4, "het": 64, "hfp": 12, "prereqs": ["A1022"]}, {"code": "A1025", "name": "Optativa", "type": "TA", "sem": 10, "hes": 8, "het": 128, "hfp": 0, "prereqs": [], "req_approved": 30}, {"code": "DA600", "name": "Actividad Formación Comp. V", "type": "CO", "sem": 10, "hes": 0, "het": 0, "hfp": 0, "prereqs": ["DA500"]}, {"code": "A1034", "name": "Práctica Profesional Supervisada (PPS)", "type": "TA", "sem": 10, "hes": 0, "het": 200, "hfp": 200, "prereqs": [], "req_approved": 30}];
 
 const semNames = [
-  "Nivelación", "1º Semestre", "2º Semestre", "3º Semestre", "4º Semestre",
-  "5º Semestre", "6º Semestre", "7º Semestre", "8º Semestre", "9º Semestre", "10º Semestre"
+  "Nivelación", "1° Semestre", "2° Semestre", "3° Semestre", "4° Semestre",
+  "5° Semestre", "6° Semestre", "7° Semestre", "8° Semestre", "9° Semestre", "10° Semestre"
 ];
+
+/* Opciones que manda la interfaz. Llegan en la URL para que estén disponibles
+   desde el primer dibujo, y setOptions() las cambia en vivo desde Configuración. */
+const OPTS = (() => {
+  const q = new URLSearchParams(location.search);
+  return { unlock: q.get('unlock') === '1', anim: q.get('anim') !== '0' };
+})();
+document.documentElement.classList.toggle('no-anim', !OPTS.anim);
+
+function setOptions(o){
+  const antes = OPTS.unlock;
+  Object.assign(OPTS, o);
+  document.documentElement.classList.toggle('no-anim', !OPTS.anim);
+  if (OPTS.unlock !== antes) { renderGrid(); renderLines(); }
+}
 
 const STORAGE_KEY = 'aero_passed_claude_dark';
 const MAP_STORAGE_KEY = 'aero_mapas_claude_dark';
@@ -313,11 +393,9 @@ const store = {
   }
 };
 
-function setStatus(text, kind){
-  const el = document.getElementById('save-status');
-  el.innerText = text;
-  el.className = 'save-status' + (kind ? ' ' + kind : '');
-}
+/* El guardado es automático y silencioso: ya no se informa en pantalla.
+   La función se mantiene para no tocar los puntos que la llamaban. */
+function setStatus(){}
 
 function timeNow(){
   return new Date().toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' });
@@ -349,6 +427,7 @@ async function init(){
   renderGrid();
   renderLines();
   updateStats();
+  sweepSemesters();
 
   window.addEventListener('resize', renderLines);
   document.getElementById('container').addEventListener('scroll', renderLines);
@@ -385,10 +464,26 @@ async function saveMaps(){
 }
 
 function updateUI(){
+  const suave = OPTS.anim && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   document.querySelectorAll('.card').forEach(card => {
     const code = card.dataset.code;
+    const s = subjectsData.find(x => x.code === code);
     card.classList.toggle('passed', passedSet.has(code));
     card.classList.toggle('has-map', !!(mapsState[code] && mapsState[code].tiene));
+
+    const cerrada = isLocked(s);
+    if (cerrada) {
+      card.classList.add('locked');
+      paintLockFace(card, s);              // pudo haberse cumplido parte del requisito
+    } else if (card.classList.contains('locked')) {
+      if (suave) {                         // se desbloqueó: la tarjeta se da vuelta
+        card.classList.add('flipping');
+        setTimeout(() => card.classList.remove('locked'), 280);
+        setTimeout(() => card.classList.remove('flipping'), 560);
+      } else {
+        card.classList.remove('locked');
+      }
+    }
   });
   updateStats();
 }
@@ -405,6 +500,59 @@ function updateStats(){
   document.getElementById('mapped-count').innerText = `${mappedCount} / ${subjectsData.length}`;
   document.getElementById('progress-percent').innerText = `${percent}%`;
   document.getElementById('progress-fill').style.width = `${percent}%`;
+}
+
+/* Al abrir la sección, las columnas se encienden una tras otra desde el primer
+   semestre hasta el que estás cursando: el primero con materias pendientes.
+   La vista viaja con el bloque encendido y queda donde vas a trabajar. */
+function currentSemesterIndex(){
+  const sems = [...new Set(subjectsData.map(s => s.sem))].sort((a, b) => a - b);
+  const pendiente = sems.find(sem =>
+    subjectsData.some(s => s.sem === sem && !passedSet.has(s.code)));
+  return pendiente == null ? sems.length - 1 : Math.max(0, sems.indexOf(pendiente));
+}
+
+function sweepSemesters(){
+  const scroller = document.getElementById('container');
+  const cols = [...gridEl.children];
+  const hasta = Math.min(currentSemesterIndex(), cols.length - 1);
+  if (hasta < 0) return;
+  const settle = col => Math.max(0, Math.min(
+    col.offsetLeft - (scroller.clientWidth - col.offsetWidth) / 2,
+    scroller.scrollWidth - scroller.clientWidth));
+
+  if (!OPTS.anim || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    scroller.scrollLeft = settle(cols[hasta]);
+    renderLines();
+    return;
+  }
+  cols.slice(0, hasta + 1).forEach((col, i) => {
+    setTimeout(() => {
+      col.classList.add('lit');
+      setTimeout(() => col.classList.remove('lit'), 700);
+      scroller.scrollTo({ left: settle(col), behavior: 'smooth' });
+      renderLines();
+    }, i * 190);
+  });
+}
+
+/* --- Modo desbloqueo --- */
+function faltantes(s){ return (s.prereqs || []).filter(c => !passedSet.has(c)); }
+
+function isLocked(s){
+  if (!OPTS.unlock || passedSet.has(s.code)) return false;
+  return faltantes(s).length > 0 || (s.req_approved > 0 && passedSet.size < s.req_approved);
+}
+
+function paintLockFace(card, s){
+  const face = card.querySelector('.lock-keys');
+  if (!face) return;
+  const falta = faltantes(s);
+  const partes = falta.slice(0, 4);
+  if (falta.length > 4) partes.push('+' + (falta.length - 4));
+  if (s.req_approved > 0 && passedSet.size < s.req_approved)
+    partes.push(passedSet.size + '/' + s.req_approved + ' aprob.');
+  face.innerText = partes.join(' · ');
 }
 
 function renderGrid(){
@@ -425,7 +573,7 @@ function renderGrid(){
     semSubjects.forEach(s => {
       const card = document.createElement('div');
       const hasMap = !!(mapsState[s.code] && mapsState[s.code].tiene);
-      card.className = `card type-${s.type} ${passedSet.has(s.code) ? 'passed' : ''} ${hasMap ? 'has-map' : ''}`;
+      card.className = `card type-${s.type} ${passedSet.has(s.code) ? 'passed' : ''} ${hasMap ? 'has-map' : ''} ${isLocked(s) ? 'locked' : ''}`;
       card.dataset.code = s.code;
       card.id = `card-${s.code}`;
 
@@ -442,9 +590,12 @@ function renderGrid(){
           <span>${s.het} hs</span>
           ${reqText}
         </div>
+        <div class="lock-face"><div class="lock-ico">🔒</div><div class="lock-keys"></div></div>
       `;
+      paintLockFace(card, s);
 
       card.addEventListener('click', async () => {
+        if (card.classList.contains('locked')) return;
         passedSet.has(s.code) ? passedSet.delete(s.code) : passedSet.add(s.code);
         await saveProgress();
       });
@@ -588,8 +739,11 @@ function renderLines(){
 function highlightNetwork(code, active, event){
   const subject = subjectsData.find(s => s.code === code);
 
+  /* Una tarjeta bloqueada no responde al cursor: no resalta ni muestra ficha. */
+  if (active && document.getElementById('card-' + code)?.classList.contains('locked')) return;
+
   if (!active) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight-target', 'highlight-prereq', 'highlight-unlocks', 'dimmed'));
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight-target', 'highlight-prereq', 'highlight-unlocks', 'will-unlock', 'dimmed'));
     document.querySelectorAll('path.connection').forEach(l => l.classList.remove('active-prereq', 'active-unlocks'));
     tooltipEl.style.display = 'none';
     return;
@@ -600,8 +754,13 @@ function highlightNetwork(code, active, event){
 
   document.querySelectorAll('.card').forEach(card => {
     const cCode = card.dataset.code;
+    const cSubj = subjectsData.find(s => s.code === cCode);
+    /* Bloqueada a la que le falta justamente esta materia: se abre en blanco. */
+    const seDestraba = card.classList.contains('locked') && faltantes(cSubj).includes(code);
+
     if (cCode === code) card.classList.add('highlight-target');
     else if (prereqs.includes(cCode)) card.classList.add('highlight-prereq');
+    else if (seDestraba) card.classList.add('will-unlock');
     else if (unlocks.includes(cCode)) card.classList.add('highlight-unlocks');
     else card.classList.add('dimmed');
   });
