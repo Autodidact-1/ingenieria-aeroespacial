@@ -1,0 +1,307 @@
+
+<style>
+  :root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #adb5bd;
+    --border-tertiary: #495057;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: var(--transition);
+  }
+
+  h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .plan-wrap{padding:1rem 0;font-family:var(--font-sans); max-width: 1200px; margin: 0 auto; padding: 2rem;}
+  .top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+  .stat-box{background:var(--bg-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center; box-shadow: var(--shadow); transition: var(--transition);}
+  .stat-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+  .stat-num{font-size:22px;font-weight:500;color:var(--text-primary)}
+  .stat-lbl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+  .semana-card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:16px;overflow:hidden; box-shadow: var(--shadow); transition: var(--transition);}
+  .semana-card:hover { box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+  .semana-header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none; transition: var(--transition);}
+  .semana-header:hover{background:var(--bg-secondary)}
+  .semana-badge{min-width:80px;padding:4px 10px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;text-align:center}
+  .semana-title{font-size:15px;font-weight:500;color:var(--text-primary);flex:1}
+  .semana-horas{font-size:12px;color:var(--text-secondary);white-space:nowrap}
+  .chevron{font-size:12px;color:var(--text-secondary);transition:transform 0.2s}
+  .chevron.open{transform:rotate(90deg)}
+  .semana-body{display:none;border-top:1px solid var(--border-tertiary)}
+  .semana-body.open{display:block}
+  .dia-block{border-bottom:1px solid var(--border-tertiary)}
+  .dia-block:last-child{border-bottom:none}
+  .dia-header{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--bg-secondary)}
+  .dia-label{font-size:12px;font-weight:500;color:var(--text-secondary);min-width:80px}
+  .dia-horas{font-size:11px;color:var(--text-secondary);margin-left:auto}
+  .slot-row{display:flex;gap:10px;align-items:flex-start;padding:8px 16px 8px 32px;border-top:1px solid var(--border-tertiary)}
+  .slot-tiempo{font-size:11px;color:var(--text-secondary);min-width:90px;padding-top:2px;white-space:nowrap}
+  .slot-content{flex:1}
+  .slot-nombre{font-size:13px;color:var(--text-primary);line-height:1.4}
+  .slot-tip{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+  .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:var(--border-radius-md);margin-top:3px;margin-right:3px; transition: var(--transition);}
+  .tag:hover { opacity: 0.8; }
+  .tag-teoria{background:#E6F1FB;color:#0C447C}
+  .tag-practica{background:#EAF3DE;color:#3B6D11}
+  .tag-clave{background:#FAECE7;color:#993C1D}
+  .tag-repaso{background:#EEEDFE;color:#3C3489}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary)}
+  .legend-dot{width:10px;height:10px;border-radius:2px}
+  .aviso{background:var(--bg-secondary);border-left:3px solid #378ADD;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);line-height:1.5; box-shadow: var(--shadow);}
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--transition);
+    z-index: 1000;
+  }
+  .theme-toggle:hover {
+    background: var(--text-secondary);
+    color: var(--bg-primary);
+  }
+</style>
+
+<div class="plan-wrap">
+  <h2 class="sr-only">Plan de estudio intensivo Matemática B con 5 horas diarias en 4 semanas</h2>
+
+  <div class="top-stats">
+    <div class="stat-box"><div class="stat-num">4</div><div class="stat-lbl">semanas</div></div>
+    <div class="stat-box"><div class="stat-num">5 hs</div><div class="stat-lbl">por día</div></div>
+    <div class="stat-box"><div class="stat-num">140 hs</div><div class="stat-lbl">totales</div></div>
+    <div class="stat-box"><div class="stat-num">7</div><div class="stat-lbl">unidades</div></div>
+  </div>
+
+  <div class="aviso">Cada día está dividido en dos bloques: <strong>2 hs de teoría</strong> + <strong>2 hs de práctica</strong> + <strong>1 hs de repaso/cierre</strong>. Los sábados son de repaso semanal. Los domingos, descanso recomendado.</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#B5D4F4"></div>Teoría</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C0DD97"></div>Práctica</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F5C4B3"></div>⚠ Clave</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#CECBF6"></div>Repaso</div>
+  </div>
+
+  <div id="semanas"></div>
+</div>
+
+<script>
+const semanas = [
+  {
+    num:1, color:"#378ADD", bg:"#E6F1FB",
+    titulo:"Integral en una variable + técnicas",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Sumas de Riemann + integral definida: definición",tip:"Leer 1.1 y 1.2 del libro. Entender la intuición geométrica.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Propiedades de la integral + ejercicios 1.2.2",tip:"Resolver todos los ejercicios de paridad y propiedades.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"TVM para integrales + función integral",tip:"Leer 1.3 y 1.4. Anotar los resultados clave.",tags:["repaso"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Teorema Fundamental del Cálculo (partes I y II)",tip:"Sección 1.6. Es el concepto más importante de la unidad.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios TFC + cálculo de integrales definidas",tip:"Resolver ejercicios 1.6.2 completos.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Repaso + lista de integrales del Anexo 8.1",tip:"Memorizar las fórmulas básicas del Anexo.",tags:["repaso"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Integral indefinida + método de sustitución",tip:"Secciones 1.9 y 1.10. La sustitución es la técnica más usada.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios de sustitución — variados",tip:"Resolver todos los de 1.10.1 incluyendo los definidos.",tags:["practica"]},
+        {tiempo:"13:00–14:00",nombre:"Autoevaluación: 5 integrales cronometradas",tip:"Sin mirar el libro. Corregir y anotar errores.",tags:["repaso"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Integración por partes (regla ILATE)",tip:"Sección 1.11. Estudiar los 4 ejemplos del libro.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios integración por partes",tip:"Incluir los casos donde se aplica dos veces.",tags:["practica"]},
+        {tiempo:"13:00–14:00",nombre:"Identidades trigonométricas + fracciones simples",tip:"Secciones 1.12 y 1.13. Solo lectura y ejemplos hoy.",tags:["teoria"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Aplicaciones: áreas, volúmenes, longitud de arco",tip:"Secciones 1.7.1–1.7.3. Siempre graficar primero.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios de áreas y volúmenes de revolución",tip:"Resolver 1.7.4, 1.7.5 y 1.7.6.",tags:["practica"]},
+        {tiempo:"13:00–14:00",nombre:"Aplicaciones físicas (trabajo, masa, desplazamiento)",tip:"Sección 1.8. Plantear diferencial antes de integrar.",tags:["teoria","practica"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Repaso integral + simulacro de ejercicios mixtos",tip:"Mezclar todas las técnicas vistas en la semana.",tags:["repaso","practica"]},
+        {tiempo:"12:00–14:00",nombre:"Ejercicios fracciones simples + cierre semana 1",tip:"Terminar sección 1.13.1. Anotar dudas para resolver.",tags:["practica"]},
+      ]},
+    ]
+  },
+  {
+    num:2, color:"#D85A30", bg:"#FAECE7",
+    titulo:"EDO de 1er orden + Integrales impropias + Series",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"EDO: concepto, clasificación, solución general",tip:"Sección 3.1. Entender qué es una EDO antes de resolver.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Variables separables — teoría + ejercicios",tip:"Sección 3.2. Separar e integrar cada miembro.",tags:["teoria","clave","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Ecuaciones exactas — condición de exactitud",tip:"Sección 3.3. Verificar siempre ∂P/∂y = ∂Q/∂x.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"EDO lineal de 1er orden: homogénea y no homogénea",tip:"Sección 3.4. Variación de parámetros como método.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios EDO lineal + problema de valor inicial",tip:"Secciones 3.4.5 y 3.5. Verificar siempre la solución.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Teorema de existencia y unicidad",tip:"Sección 3.5.1. Saber cuándo se garantiza solución única.",tags:["teoria"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Modelado: crecimiento, enfriamiento, radioactividad",tip:"Sección 3.6. Armar la EDO desde el enunciado físico.",tags:["teoria","practica"]},
+        {tiempo:"11:00–13:00",nombre:"Familias de curvas ortogonales",tip:"Sección 3.7. Ejercicios de trayectorias ortogonales.",tags:["practica"]},
+        {tiempo:"13:00–14:00",nombre:"Integrales impropias: tipos y convergencia",tip:"Sección 2.1. Recordar que se define con un límite.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios de integrales impropias",tip:"Resolver toda la sección 2.1.1.",tags:["practica"]},
+        {tiempo:"11:00–13:00",nombre:"Sucesiones: convergencia y monotonía",tip:"Secciones 2.2 y 2.2.1. Límites de sucesiones conocidas.",tags:["teoria"]},
+        {tiempo:"13:00–14:00",nombre:"Series: definición, sumas parciales, convergencia",tip:"Sección 2.3. Entender bien la suma parcial Sn.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Serie geométrica + serie telescópica",tip:"Secciones 2.4 y 2.5. Son las más directas para calcular suma.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Criterios de convergencia (divergencia, integral, p-serie)",tip:"Secciones 2.6.1–2.6.3. Aprender a aplicarlos en orden.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Criterios: comparación, cociente, raíz, Leibniz",tip:"Secciones 2.6.4–2.8. Saber qué criterio usar en cada caso.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Ejercicios series — todos los criterios",tip:"Resolver sección 2.9 completa.",tags:["practica","repaso"]},
+        {tiempo:"12:00–14:00",nombre:"Repaso semana 2 + corrección de errores",tip:"Repasar EDO y series. Anotar las dudas.",tags:["repaso"]},
+      ]},
+    ]
+  },
+  {
+    num:3, color:"#7F77DD", bg:"#EEEDFE",
+    titulo:"Integral doble y triple",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Integral doble: definición, propiedades, Fubini",tip:"Sección 4.1. Pensar el volumen bajo una superficie.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Regiones tipo I y tipo II — cálculo con Fubini",tip:"Siempre dibujar la región antes de plantear la integral.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios integrales dobles en rectángulo",tip:"Sección 4.1.3 primeros ejercicios.",tags:["practica"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Cambio de orden de integración",tip:"Sección 4.1.3. Redescribir la región en el otro orden.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Aplicaciones: área, volumen, masa, centro de masa",tip:"Sección 4.2. El jacobiano para cambios de variables.",tags:["teoria","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de aplicaciones integrales dobles",tip:"Resolver sección 4.2.1.",tags:["practica"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Coordenadas polares + cambio de variables",tip:"Secciones 4.4 y 4.5. Jacobiano en polares: r.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios integrales dobles en polares",tip:"Resolver 4.5.1. Cuando aparece x²+y² → polares.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Integral triple: definición y cálculo iterado",tip:"Sección 5.1. Extender la misma lógica de Fubini a 3D.",tags:["teoria"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Coordenadas cilíndricas",tip:"Sección 5.3. Útil para cilindros y paraboloides.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Coordenadas esféricas",tip:"Sección 5.4. Jacobiano: ρ²sinφ. Para esferas y conos.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios integrales triples",tip:"Resolver 5.3.1 y parte de 5.4.1.",tags:["practica"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios integrales triples completos",tip:"Secciones 5.1.2 y 5.4.1. Elegir bien el sistema de coordenadas.",tags:["practica","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Cambio de variables en integral doble y triple",tip:"Secciones 4.3 y 5.2. Calcular el jacobiano correctamente.",tags:["teoria","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Repaso rápido unidades 4 y 5",tip:"Repasar fórmulas de jacobianos y los límites de integración.",tags:["repaso"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro: ejercicios dobles y triples cronometrados",tip:"5 ejercicios completos sin consultar notas.",tags:["practica","repaso"]},
+        {tiempo:"12:00–14:00",nombre:"Corrección y repaso de semana 3",tip:"Identificar errores sistemáticos. Reforzar puntos débiles.",tags:["repaso"]},
+      ]},
+    ]
+  },
+  {
+    num:4, color:"#1D9E75", bg:"#E1F5EE",
+    titulo:"Cálculo vectorial: integral de línea y superficie",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Curvas paramétricas, vector tangente y longitud de arco",tip:"Secciones 6.2 y 6.3. Visualizar la curva en el espacio.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Campos vectoriales, gradiente, divergencia y rotor",tip:"Secciones 6.4–6.6. Entender qué mide cada operador.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Campos conservativos y función potencial",tip:"Sección 6.5. Verificar rot F = 0 para confirmar.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Integral de línea de función escalar",tip:"Sección 6.7. Parametrizar la curva y sustituir.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Integral de línea de campo vectorial — trabajo",tip:"Sección 6.8. F·dr es la clave.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios integrales de línea",tip:"Resolver 6.7.1 y 6.8.3.",tags:["practica"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Teorema de Green — enunciado y demostración",tip:"Sección 6.9. Relaciona integral doble con circulación.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Aplicaciones del Teorema de Green",tip:"Cálculo de áreas y circulaciones. Sección 6.9.1.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Independencia del camino + campos conservativos",tip:"Sección 6.10. Las 4 condiciones equivalentes.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Superficies paramétricas, normal y área",tip:"Secciones 7.1 y 7.2. Normal = ∂r/∂u × ∂r/∂v.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Integral de superficie escalar + flujo",tip:"Secciones 7.3 y 7.4. Distinguir escalar vs. vectorial.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios integrales de superficie",tip:"Resolver 7.3.1 y 7.4.3.",tags:["practica"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Teorema de Stokes",tip:"Sección 7.5. Circulación = flujo del rotor.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Teorema de Gauss (divergencia)",tip:"Sección 7.6. Flujo saliente = integral de la divergencia.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Aplicaciones físicas: Ley de Gauss, campo eléctrico",tip:"Sección 7.7. Conectar con Física II.",tags:["teoria"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro final completo — un ejercicio de cada unidad",tip:"Sin notas, 3 horas. Simular condiciones de parcial.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Corrección final + repaso de fórmulas clave",tip:"Repasar Anexo 8.4 con todos los resultados resumidos.",tags:["repaso"]},
+      ]},
+    ]
+  }
+];
+
+const container = document.getElementById("semanas");
+
+semanas.forEach((s,i) => {
+  const card = document.createElement("div");
+  card.className = "semana-card";
+
+  const header = document.createElement("div");
+  header.className = "semana-header";
+  header.innerHTML = `
+    <span class="semana-badge" style="background:${s.bg};color:${s.color}">Semana ${s.num}</span>
+    <span class="semana-title">${s.titulo}</span>
+    <span class="semana-horas">~35 hs</span>
+    <span class="chevron" id="chev${i}">▶</span>
+  `;
+
+  const body = document.createElement("div");
+  body.className = "semana-body";
+  body.id = "body"+i;
+
+  s.dias.forEach(d => {
+    const diaBlock = document.createElement("div");
+    diaBlock.className = "dia-block";
+
+    const diaH = document.createElement("div");
+    diaH.className = "dia-header";
+    diaH.innerHTML = `<span class="dia-label">${d.dia}</span><span class="dia-horas">5 hs</span>`;
+    diaBlock.appendChild(diaH);
+
+    d.slots.forEach(sl => {
+      const row = document.createElement("div");
+      row.className = "slot-row";
+      const tagsHtml = sl.tags.map(t => `<span class="tag tag-${t}">${t==="clave"?"⚠ clave":t}</span>`).join("");
+      row.innerHTML = `
+        <span class="slot-tiempo">${sl.tiempo}</span>
+        <div class="slot-content">
+          <div class="slot-nombre">${sl.nombre}</div>
+          <div class="slot-tip">${sl.tip}</div>
+          ${tagsHtml}
+        </div>
+      `;
+      diaBlock.appendChild(row);
+    });
+
+    body.appendChild(diaBlock);
+  });
+
+  header.addEventListener("click", () => {
+    const isOpen = body.classList.contains("open");
+    body.classList.toggle("open", !isOpen);
+    document.getElementById("chev"+i).classList.toggle("open", !isOpen);
+  });
+
+  card.appendChild(header);
+  card.appendChild(body);
+  container.appendChild(card);
+
+  if(i===0){ body.classList.add("open"); document.getElementById("chev0").classList.add("open"); }
+});
+</script>
