@@ -1,0 +1,314 @@
+
+<style>
+  :root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #adb5bd;
+    --border-tertiary: #495057;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: var(--transition);
+  }
+
+  h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .plan-wrap{padding:1rem 0;font-family:var(--font-sans); max-width: 1200px; margin: 0 auto; padding: 2rem;}
+  .top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+  .stat-box{background:var(--bg-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center; box-shadow: var(--shadow); transition: var(--transition);}
+  .stat-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+  .stat-num{font-size:22px;font-weight:500;color:var(--text-primary)}
+  .stat-lbl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+  .modulo-label{font-size:11px;font-weight:500;padding:3px 10px;border-radius:var(--border-radius-md);display:inline-block;margin-bottom:12px; background: var(--bg-secondary); color: var(--text-secondary);}
+  .semana-card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:16px;overflow:hidden; box-shadow: var(--shadow); transition: var(--transition);}
+  .semana-card:hover { box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+  .semana-header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none; transition: var(--transition);}
+  .semana-header:hover{background:var(--bg-secondary)}
+  .semana-badge{min-width:80px;padding:4px 10px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;text-align:center}
+  .semana-title{font-size:15px;font-weight:500;color:var(--text-primary);flex:1}
+  .semana-horas{font-size:12px;color:var(--text-secondary);white-space:nowrap}
+  .chevron{font-size:12px;color:var(--text-secondary);transition:transform 0.2s}
+  .chevron.open{transform:rotate(90deg)}
+  .semana-body{display:none;border-top:1px solid var(--border-tertiary)}
+  .semana-body.open{display:block}
+  .dia-block{border-bottom:1px solid var(--border-tertiary)}
+  .dia-block:last-child{border-bottom:none}
+  .dia-header{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--bg-secondary)}
+  .dia-label{font-size:12px;font-weight:500;color:var(--text-secondary);min-width:80px}
+  .dia-horas{font-size:11px;color:var(--text-secondary);margin-left:auto}
+  .slot-row{display:flex;gap:10px;align-items:flex-start;padding:8px 16px 8px 32px;border-top:1px solid var(--border-tertiary)}
+  .slot-tiempo{font-size:11px;color:var(--text-secondary);min-width:90px;padding-top:2px;white-space:nowrap}
+  .slot-content{flex:1}
+  .slot-nombre{font-size:13px;color:var(--text-primary);line-height:1.4}
+  .slot-tip{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+  .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:var(--border-radius-md);margin-top:3px;margin-right:3px; transition: var(--transition);}
+  .tag:hover { opacity: 0.8; }
+  .tag-teoria{background:#E6F1FB;color:#0C447C}
+  .tag-practica{background:#EAF3DE;color:#3B6D11}
+  .tag-clave{background:#FAECE7;color:#993C1D}
+  .tag-repaso{background:#EEEDFE;color:#3C3489}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary)}
+  .legend-dot{width:10px;height:10px;border-radius:2px}
+  .aviso{background:var(--bg-secondary);border-left:3px solid #7F77DD;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);line-height:1.5; box-shadow: var(--shadow);}
+  .modulo-sep{font-size:13px;font-weight:500;color:var(--text-secondary);margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border-tertiary)}
+
+  .theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: var(--transition);
+    z-index: 1000;
+  }
+  .theme-toggle:hover {
+    background: var(--text-secondary);
+    color: var(--bg-primary);
+  }
+</style>
+
+<div class="plan-wrap">
+  <h2 class="sr-only">Plan de estudio Matemática C UNLP Ingeniería, 5 horas diarias, 4 semanas</h2>
+
+  <div class="top-stats">
+    <div class="stat-box"><div class="stat-num">4</div><div class="stat-lbl">semanas</div></div>
+    <div class="stat-box"><div class="stat-num">5 hs</div><div class="stat-lbl">por día</div></div>
+    <div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl">módulos</div></div>
+    <div class="stat-box"><div class="stat-num">~140 hs</div><div class="stat-lbl">totales</div></div>
+  </div>
+
+  <div class="aviso">Matemática C tiene 3 módulos: <strong>Series de Taylor</strong> (Parte I), <strong>Álgebra Lineal</strong> (Parte II) y <strong>Transformaciones Lineales</strong> (Parte III). El álgebra lineal es el núcleo y ocupa la mayor parte del plan.</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#B5D4F4"></div>Teoría</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C0DD97"></div>Práctica</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F5C4B3"></div>⚠ Clave</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#CECBF6"></div>Repaso</div>
+  </div>
+
+  <div id="semanas"></div>
+</div>
+
+<script>
+const semanas = [
+  {
+    num:1, color:"#378ADD", bg:"#E6F1FB",
+    titulo:"Series de Taylor + Sistemas de Ecuaciones",
+    modulo:"Módulo I (Parte I) + inicio Parte II",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Series de potencias: definición, radio e intervalo de convergencia",tip:"Parte I §1.2–1.4. Dominar el criterio de la razón para encontrar el radio R.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios de intervalo de convergencia",tip:"Resolver §1.5 completo — incluye series centradas en a≠0.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Derivación e integración de series de potencias",tip:"§2.1. La derivada término a término es la herramienta más potente de la unidad.",tags:["teoria"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Representaciones en serie: eˣ, 1/(1-x), ln(1+x), arctan(x)",tip:"§2 — las 4 series estándar para construir todas las demás.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios §2.3: representaciones por derivación/integración",tip:"Obtener series para funciones compuestas sin calcular derivadas directamente.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Serie de Taylor y Maclaurin: definición y coeficientes",tip:"§3 y §4. Entender que cn = f⁽ⁿ⁾(a)/n! es la clave del método.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Teorema de Taylor y residuo de Lagrange",tip:"§4.2. El residuo Rn(x) → 0 es lo que garantiza que la serie converge a f(x).",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Polinomios de Taylor: approximaciones y cotas de error",tip:"§4.3. Estudiar ejemplos 28, 29, 30 del apunte.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Serie binomial y aplicaciones físicas",tip:"§5. Útil para aproximar raíces y expresiones relativistas.",tags:["teoria"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios §4.4 y §4.5: aproximaciones y límites con Taylor",tip:"Calcular límites 0/0 con Taylor es más elegante que L'Hôpital.",tags:["practica","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Autoevaluación §6 completa + corrección",tip:"El §6 tiene 35 ítems verdadero/falso y problemas — excelente para consolidar.",tags:["repaso","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Inicio Álgebra Lineal: Sistemas de ecuaciones — conceptos",tip:"Parte II §1.1–1.2. Entender qué es un sistema lineal y las 3 posibilidades de solución.",tags:["teoria"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Eliminación de Gauss y forma escalonada",tip:"§1.5. Es el algoritmo base de todo el Álgebra Lineal.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Gauss-Jordan y sistemas homogéneos",tip:"§1.6 y §1.2.2. Entender las variables libres y la solución paramétrica.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de sistemas — Gauss y Gauss-Jordan",tip:"Resolver al menos 8 sistemas variados, incluyendo inconsistentes.",tags:["practica"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Repaso Series de Taylor + ejercicios integradores",tip:"Combinar: hallar la serie, polinomio de Taylor, cota de error y límites.",tags:["repaso","practica"]},
+        {tiempo:"12:00–14:00",nombre:"Ejercicios §1 Álgebra — sistemas con parámetros",tip:"Analizar para qué valores del parámetro el sistema tiene 0, 1 o ∞ soluciones.",tags:["practica","clave"]},
+      ]},
+    ]
+  },
+  {
+    num:2, color:"#1D9E75", bg:"#E1F5EE",
+    titulo:"Matrices, Determinantes e Inversa",
+    modulo:"Módulo I — Parte II (§2 y §3)",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Matrices: operaciones, producto y propiedades",tip:"§2.2–2.3. Atención: el producto matricial NO es conmutativo.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Representación matricial de sistemas + matrices especiales",tip:"§2.4 y §2.2.2. Identidad, simétrica, ortogonal, triangular.",tags:["teoria"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: producto de matrices y sistemas Ax=b",tip:"Resolver sistemas en forma matricial y verificar con sustitución.",tags:["practica"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Matriz inversa: definición y propiedades",tip:"§2.5. Una matriz A es invertible ⟺ det(A) ≠ 0 (lo veremos después).",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Cálculo de la inversa por Gauss-Jordan [A|I]→[I|A⁻¹]",tip:"§2.7. El método más práctico — hacer al menos 6 ejemplos.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Factorización LU",tip:"§2.8. Útil para resolver múltiples sistemas con la misma matriz.",tags:["teoria"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Determinantes: definición y desarrollo por cofactores",tip:"§3.2. Para matrices 2×2 y 3×3 memorizar las fórmulas directas.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Propiedades del determinante",tip:"§3.3. Las 8 propiedades permiten simplificar cálculos enormemente.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Métodos para calcular det: reducción por filas",tip:"§3.6. Usar operaciones elementales para triangularizar y calcular det.",tags:["teoria","practica","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Determinante de un producto y de la inversa",tip:"§3.5.2: det(AB) = det(A)·det(B). Consecuencias para la invertibilidad.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Regla de Cramer + interpretación geométrica del det",tip:"§3.8 y §3.4. Área del paralelogramo y volumen del paralelepípedo.",tags:["teoria","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios combinados: inversa y determinantes",tip:"Resolver 8 ejercicios mezclando inversas, dets y sistemas.",tags:["practica","repaso"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Aplicaciones de matrices: redes, grafos, encriptación",tip:"§2.9. Conecta el álgebra abstracta con problemas reales de ingeniería.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios integradores §2 y §3",tip:"Incluir matrices por bloques (§3.7) y matrices ortogonales.",tags:["practica"]},
+        {tiempo:"13:00–14:00",nombre:"Simulacro parcial de matrices y determinantes",tip:"3 ejercicios completos sin notas en 1 hora.",tags:["repaso","practica"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Repaso semana 2 + corrección de errores",tip:"Reforzar las propiedades del determinante y el cálculo de inversa.",tags:["repaso"]},
+        {tiempo:"12:00–14:00",nombre:"Inicio Espacios Vectoriales: definición y axiomas",tip:"§4.1–4.2. Los 10 axiomas del espacio vectorial — verificarlos en ejemplos.",tags:["teoria","clave"]},
+      ]},
+    ]
+  },
+  {
+    num:3, color:"#7F77DD", bg:"#EEEDFE",
+    titulo:"Espacios Vectoriales, Bases y Dimensión",
+    modulo:"Módulo I — Parte II (§4)",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Subespacios: definición y criterio de subespacio",tip:"§4.3. El criterio de 3 condiciones es el más usado en parciales.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Espacio nulo y espacio columna de una matriz",tip:"§4.4 y §4.10. Nul(A) y Col(A) son los dos subespacios más importantes.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: verificar subespacios y hallar Nul(A)",tip:"Resolver al menos 6 ejercicios de cada tipo.",tags:["practica"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Conjunto generador y espacio generado",tip:"§4.5–4.6. Span{v₁,...,vₙ} es el subespacio más pequeño que los contiene.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Independencia lineal: definición y criterio matricial",tip:"§4.7. El conjunto es l.i. ⟺ Ax=0 solo tiene solución trivial.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de independencia lineal",tip:"Incluir casos en R², R³, y en espacios de polinomios.",tags:["practica","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Bases y dimensión de un espacio vectorial",tip:"§4.8. Base = conjunto l.i. generador. dim(V) = número de vectores de cualquier base.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Coordenadas en una base y cambio de base",tip:"§4.9. La matriz de cambio de base P es esencial para transformaciones.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: bases, coordenadas y cambio de base",tip:"Resolver 5 ejercicios completos con cambio de base.",tags:["practica","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Espacio fila, columna y rango de una matriz",tip:"§4.10. rango(A) = dim(Col(A)) = dim(Fil(A)). Calcularlo con Gauss.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Teorema Rango-Nulidad",tip:"§4.11. rango(A) + nulidad(A) = n (columnas). Fundamental para sistemas.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Aplicación a sistemas: cuándo hay solución y cuántas",tip:"§4.12. Conectar rango con compatibilidad del sistema — el cierre del capítulo.",tags:["teoria","practica","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios integradores de Espacios Vectoriales",tip:"Combinar: subespacio, base, rango, nulidad y sistemas.",tags:["practica","repaso"]},
+        {tiempo:"11:00–13:00",nombre:"Valores y Vectores Propios: definición y cálculo",tip:"No está en el índice del apunte II pero es tema central de Mate C — buscar en bibliografía complementaria.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Polinomio característico det(A-λI)=0",tip:"Raíces del polinomio = autovalores. Cada autovalor da su autoespacio.",tags:["teoria","practica","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Ejercicios: autovalores, autovectores y diagonalización",tip:"A es diagonalizable ⟺ tiene n autovectores l.i. Armar P y D.",tags:["practica","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Repaso semana 3 + simulacro espacios vectoriales",tip:"2 ejercicios completos de subespacio, base, rango-nulidad y autovalores.",tags:["repaso","practica"]},
+      ]},
+    ]
+  },
+  {
+    num:4, color:"#D85A30", bg:"#FAECE7",
+    titulo:"Transformaciones Lineales + Repaso Final",
+    modulo:"Módulo II — Parte III (VI Transformaciones Lineales)",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Transformaciones lineales: definición y verificación",tip:"Parte III §6.1. Verificar L(αu+βv) = αL(u)+βL(v) es el paso inicial.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejemplos fundamentales: proyección, reflexión, rotación",tip:"§6.1. Los 3 ejemplos geométricos son los más pedidos en parciales.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Núcleo e imagen de una transformación lineal",tip:"Ker(L) y Im(L) son los equivalentes de Nul(A) y Col(A) para TL.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Propiedades: inyectividad, sobreyectividad e isomorfismos",tip:"L inyectiva ⟺ Ker(L)={0}. L sobreyectiva ⟺ Im(L)=W.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Representación matricial de una TL en bases dadas",tip:"§6 Clase 2. La matriz [L]_B depende de las bases elegidas — clave del tema.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: hallar la matriz de una TL en distintas bases",tip:"Aplicar L a cada vector de la base y escribir coordenadas en la base de llegada.",tags:["practica","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Cambio de base y matrices semejantes",tip:"§6 Clase 2. [L]_B' = P⁻¹[L]_B P. Matrices semejantes representan la misma TL.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Composición de transformaciones lineales",tip:"§6 Clase 2. La composición corresponde al producto de matrices.",tags:["teoria","practica"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios integradores de Transformaciones Lineales",tip:"Combinar: verificar, hallar ker/im, matriz representante, cambio de base.",tags:["practica","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Repaso general Módulo I Parte I: series y Taylor",tip:"Revisar las 7 series de Maclaurin estándar + teorema de Taylor.",tags:["repaso","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Repaso general Parte II: sistemas, matrices, determinantes",tip:"Repasar: Gauss, inversa, det y sus propiedades clave.",tags:["repaso","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Repaso general: espacios vectoriales y autovalores",tip:"Repasar: subespacio, base, rango-nulidad, diagonalización.",tags:["repaso","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Simulacro completo: un ejercicio de cada módulo",tip:"Taylor + sistema + determinante + espacio vectorial + TL. Sin notas.",tags:["practica","repaso","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Corrección del simulacro y refuerzo de puntos débiles",tip:"Identificar qué temas necesitan más práctica y resolverlos.",tags:["repaso"]},
+        {tiempo:"13:00–14:00",nombre:"Repaso final de fórmulas y resultados clave",tip:"Armar una hoja resumen con det, rango-nulidad, Taylor y TL.",tags:["repaso"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro final tipo parcial completo",tip:"3 horas, ejercicios de los 3 módulos, condiciones reales de examen.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Corrección final y cierre",tip:"Último repaso de errores. Repasar §6 Autoevaluación de la Parte I.",tags:["repaso"]},
+      ]},
+    ]
+  }
+];
+
+const container = document.getElementById("semanas");
+
+semanas.forEach((s,i) => {
+  const modSep = document.createElement("div");
+  modSep.className = "modulo-sep";
+  modSep.textContent = s.modulo;
+  container.appendChild(modSep);
+
+  const card = document.createElement("div");
+  card.className = "semana-card";
+
+  const header = document.createElement("div");
+  header.className = "semana-header";
+  header.innerHTML = `
+    <span class="semana-badge" style="background:${s.bg};color:${s.color}">Semana ${s.num}</span>
+    <span class="semana-title">${s.titulo}</span>
+    <span class="semana-horas">~35 hs</span>
+    <span class="chevron" id="chev${i}">▶</span>
+  `;
+
+  const body = document.createElement("div");
+  body.className = "semana-body";
+
+  s.dias.forEach(d => {
+    const diaBlock = document.createElement("div");
+    diaBlock.className = "dia-block";
+    const diaH = document.createElement("div");
+    diaH.className = "dia-header";
+    diaH.innerHTML = `<span class="dia-label">${d.dia}</span><span class="dia-horas">5 hs</span>`;
+    diaBlock.appendChild(diaH);
+    d.slots.forEach(sl => {
+      const row = document.createElement("div");
+      row.className = "slot-row";
+      const tagsHtml = sl.tags.map(t => `<span class="tag tag-${t}">${t==="clave"?"⚠ clave":t}</span>`).join("");
+      row.innerHTML = `
+        <span class="slot-tiempo">${sl.tiempo}</span>
+        <div class="slot-content">
+          <div class="slot-nombre">${sl.nombre}</div>
+          <div class="slot-tip">${sl.tip}</div>
+          ${tagsHtml}
+        </div>
+      `;
+      diaBlock.appendChild(row);
+    });
+    body.appendChild(diaBlock);
+  });
+
+  header.addEventListener("click", () => {
+    const isOpen = body.classList.contains("open");
+    body.classList.toggle("open", !isOpen);
+    document.getElementById("chev"+i).classList.toggle("open", !isOpen);
+  });
+
+  card.appendChild(header);
+  card.appendChild(body);
+  container.appendChild(card);
+
+  if(i===0){ body.classList.add("open"); document.getElementById("chev0").classList.add("open"); }
+});
+</script>

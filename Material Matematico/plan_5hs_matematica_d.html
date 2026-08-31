@@ -1,0 +1,332 @@
+
+<style>
+  :root {
+    --bg-primary: #1e1e1e;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #ffffff;
+    --text-secondary: #adb5bd;
+    --border-tertiary: #495057;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+    --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+  }
+
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    transition: var(--transition);
+  }
+
+  h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .plan-wrap{padding:1rem 0;font-family:var(--font-sans); max-width: 1200px; margin: 0 auto; padding: 2rem;}
+  .top-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+  .stat-box{background:var(--bg-secondary);border-radius:var(--border-radius-md);padding:12px;text-align:center; box-shadow: var(--shadow); transition: var(--transition);}
+  .stat-box:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+  .stat-num{font-size:22px;font-weight:500;color:var(--text-primary)}
+  .stat-lbl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+  .semana-card{background:var(--bg-primary);border:1px solid var(--border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:16px;overflow:hidden; box-shadow: var(--shadow); transition: var(--transition);}
+  .semana-card:hover { box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+  .semana-header{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;user-select:none; transition: var(--transition);}
+  .semana-header:hover{background:var(--bg-secondary)}
+  .semana-badge{min-width:80px;padding:4px 10px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;text-align:center}
+  .semana-title{font-size:15px;font-weight:500;color:var(--text-primary);flex:1}
+  .semana-sub{font-size:11px;color:var(--text-secondary);white-space:nowrap}
+  .chevron{font-size:12px;color:var(--text-secondary);transition:transform 0.2s}
+  .chevron.open{transform:rotate(90deg)}
+  .semana-body{display:none;border-top:1px solid var(--border-tertiary)}
+  .semana-body.open{display:block}
+  .dia-block{border-bottom:1px solid var(--border-tertiary)}
+  .dia-block:last-child{border-bottom:none}
+  .dia-header{display:flex;align-items:center;padding:8px 16px;background:var(--bg-secondary)}
+  .dia-label{font-size:12px;font-weight:500;color:var(--text-secondary);min-width:80px}
+  .dia-horas{font-size:11px;color:var(--text-secondary);margin-left:auto}
+  .slot-row{display:flex;gap:10px;align-items:flex-start;padding:8px 16px 8px 32px;border-top:1px solid var(--border-tertiary)}
+  .slot-tiempo{font-size:11px;color:var(--text-secondary);min-width:90px;padding-top:2px;white-space:nowrap}
+  .slot-content{flex:1}
+  .slot-nombre{font-size:13px;color:var(--text-primary);line-height:1.4}
+  .slot-tip{font-size:11px;color:var(--text-secondary);margin-top:2px;line-height:1.4}
+  .tag{display:inline-block;font-size:10px;padding:2px 6px;border-radius:var(--border-radius-md);margin-top:3px;margin-right:3px; transition: var(--transition);}
+  .tag:hover { opacity: 0.8; }
+  .tag-teoria{background:#E6F1FB;color:#0C447C}
+  .tag-practica{background:#EAF3DE;color:#3B6D11}
+  .tag-clave{background:#FAECE7;color:#993C1D}
+  .tag-repaso{background:#EEEDFE;color:#3C3489}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .legend-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text-secondary)}
+  .legend-dot{width:10px;height:10px;border-radius:2px}
+  .aviso{background:var(--bg-secondary);border-left:3px solid #BA7517;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:10px 14px;margin-bottom:16px;font-size:13px;color:var(--text-secondary);line-height:1.5; box-shadow: var(--shadow);}
+  .cap-sep{font-size:12px;font-weight:500;color:var(--text-secondary);margin:18px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--border-tertiary)}
+
+</style>
+
+<div class="plan-wrap">
+  <h2 class="sr-only">Plan de estudio Matemática D — Matemáticas Especiales UNLP Ingeniería, 5 horas diarias, 5 semanas</h2>
+
+  <div class="top-stats">
+    <div class="stat-box"><div class="stat-num">5</div><div class="stat-lbl">semanas</div></div>
+    <div class="stat-box"><div class="stat-num">5 hs</div><div class="stat-lbl">por día</div></div>
+    <div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">capítulos</div></div>
+    <div class="stat-box"><div class="stat-num">372</div><div class="stat-lbl">páginas</div></div>
+  </div>
+
+  <div class="aviso">Mate D es la más abstracta y compleja de las cuatro materias. El libro cubre <strong>variable compleja</strong> (caps. 1–5) y <strong>transformadas integrales</strong> (cap. 6). La semana 3 (integración compleja + Cauchy) es el núcleo de la materia — no apresurarse ahí.</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#B5D4F4"></div>Teoría</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#C0DD97"></div>Práctica</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#F5C4B3"></div>⚠ Clave</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#CECBF6"></div>Repaso</div>
+  </div>
+
+  <div id="semanas"></div>
+</div>
+
+<script>
+const semanas = [
+  {
+    num:1, color:"#378ADD", bg:"#E6F1FB",
+    titulo:"Funciones de variable compleja",
+    cap:"Capítulo 1 — §1.1 a §1.9",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Sistema de números complejos: forma algebraica y polar",tip:"§1.1. Dominar e^(iθ) = cosθ + i·sinθ (fórmula de Euler) — todo lo demás se apoya ahí.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Funciones de variable compleja: f(z) = u(x,y) + iv(x,y)",tip:"§1.2. Separar siempre en parte real e imaginaria para trabajar concretamente.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Límite y continuidad en el plano complejo",tip:"§1.3–1.4. La diferencia clave con lo real: el límite debe existir por cualquier camino.",tags:["teoria"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Derivabilidad: ecuaciones de Cauchy-Riemann",tip:"§1.5. ∂u/∂x = ∂v/∂y y ∂u/∂y = −∂v/∂x son las condiciones necesarias y suficientes.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Analiticidad: funciones holomorfas",tip:"§1.5. Analítica en un dominio = derivable en todos sus puntos. Verificar siempre con CR.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: Cauchy-Riemann y analiticidad",tip:"Resolver actividades §1.9 — verificar CR, determinar si f es analítica y hallar f'(z).",tags:["practica","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Funciones elementales: exponencial compleja, trigonométricas e hiperbólicas",tip:"§1.6. eᶻ, sin z, cos z se extienden naturalmente desde lo real usando la serie de Taylor.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Logaritmo complejo y potencias complejas",tip:"§1.6. Log(z) es multivaluada — entender la rama principal es esencial.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de funciones elementales complejas",tip:"Calcular valores de eᶻ, sin z, log z para z complejos dados.",tags:["practica"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Funciones armónicas: laplaciano y condición de armonicidad",tip:"§1.7. Si f = u+iv es analítica ⟹ u y v son armónicas. ∆u = 0.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Conjugada armónica: hallarla a partir de u",tip:"§1.7. Usar las ecuaciones CR para integrar y encontrar v a partir de u dada.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Problema de Dirichlet — Primera parte",tip:"§1.8. Encontrar una función armónica en un dominio con valores dados en la frontera.",tags:["teoria"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios integradores cap. 1",tip:"Resolver actividades resueltas §1.9 — mezclar CR, armonicidad y funciones elementales.",tags:["practica","repaso"]},
+        {tiempo:"11:00–13:00",nombre:"Transformaciones lineales complejas: traslación, rotación, homotecia",tip:"§2.1–2.2. w = az + b. Entender cómo transforma regiones del plano.",tags:["teoria"]},
+        {tiempo:"13:00–14:00",nombre:"Plano complejo extendido e inversión w = 1/z",tip:"§2.3–2.4. La inversión transforma círculos y rectas en círculos y rectas.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Repaso semana 1 + simulacro cap. 1",tip:"Resolver 4 ejercicios completos: CR, conjugada armónica, funciones elementales, Dirichlet.",tags:["repaso","practica"]},
+        {tiempo:"12:00–14:00",nombre:"Transformación lineal fraccionaria (TLF) w = (az+b)/(cz+d)",tip:"§2.5. Determinar la TLF que lleva 3 puntos dados a otros 3 puntos.",tags:["teoria","clave"]},
+      ]},
+    ]
+  },
+  {
+    num:2, color:"#1D9E75", bg:"#E1F5EE",
+    titulo:"Transformaciones conformes y Dirichlet",
+    cap:"Capítulo 2 — §2.1 a §2.11",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Transformación potencia w = zⁿ y curvas parametrizadas",tip:"§2.6–2.7. w = z² duplica ángulos; w = √z los reduce a la mitad.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Rotación de tangentes y transformaciones conformes",tip:"§2.8–2.9. Una función analítica con f'(z₀)≠0 es conforme en z₀ — preserva ángulos.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de transformaciones: imagen de regiones",tip:"Dado w = f(z), determinar la imagen de una región del plano z en el plano w.",tags:["practica","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Problema de Dirichlet — Segunda parte con transformaciones conformes",tip:"§2.10. La clave: transformar el dominio complejo en uno simple, resolver ahí, y volver.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios: Dirichlet con mapeos conformes",tip:"Combinar TLF o w=z² con el problema de Dirichlet.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Actividades resueltas cap. 2 — §2.11",tip:"Resolver los ejemplos guiados del libro para fijar la técnica de mapeo conforme.",tags:["practica","repaso"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Repaso y ejercicios integradores caps. 1 y 2",tip:"Conectar: analiticidad → armonicidad → Dirichlet → mapeo conforme.",tags:["repaso","practica"]},
+        {tiempo:"11:00–13:00",nombre:"Introducción a la integración compleja: curvas orientadas",tip:"§3.1. Parametrizar la curva γ(t) y calcular ∫f(z)dz como integral de variable real.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios de integración compleja directa",tip:"Calcular integrales de línea sobre segmentos, semicírculos y curvas simples.",tags:["practica"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Primitivas y independencia del camino",tip:"§3.2–3.4. Si F'(z)=f(z), entonces ∫f dz = F(b)−F(a) independientemente del camino.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios: primitivas e independencia del camino",tip:"Determinar cuándo f tiene primitiva en un dominio y calcular integrales.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Teorema de Cauchy: enunciado e intuición",tip:"§3.5. Si f es analítica en un dominio simplemente conexo, ∮f dz = 0 sobre cualquier curva cerrada.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Fórmula integral de Cauchy",tip:"§3.6. f(z₀) = (1/2πi)∮ f(z)/(z−z₀) dz — permite calcular f en un punto interior desde la frontera.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Fórmula integral para derivadas de orden n",tip:"§3.7. f⁽ⁿ⁾(z₀) = (n!/2πi)∮ f(z)/(z−z₀)ⁿ⁺¹ dz. Toda función analítica es infinitamente derivable.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: fórmula de Cauchy y derivadas",tip:"Calcular integrales del tipo ∮ f(z)/(z−z₀)ⁿ usando la fórmula — son los más frecuentes en parciales.",tags:["practica","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro integración compleja + Cauchy",tip:"5 ejercicios cronometrados: parametrización, Cauchy, FIC, derivadas.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Valores extremos de funciones armónicas + §3.9 actividades",tip:"§3.8–3.9. Principio del módulo máximo. Resolver actividades resueltas del capítulo.",tags:["teoria","repaso"]},
+      ]},
+    ]
+  },
+  {
+    num:3, color:"#D85A30", bg:"#FAECE7",
+    titulo:"Series de Laurent y Singularidades",
+    cap:"Capítulos 3 y 4 — §4.1 a §4.7",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Sucesiones y series de números complejos",tip:"§4.1–4.2. La convergencia en ℂ es análoga a ℝ — usar módulo en vez de valor absoluto.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Series de potencias complejas: radio de convergencia",tip:"§4.3. El criterio de la razón funciona igual que en ℝ. Recordar que converge en un disco.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Serie de Taylor en el plano complejo",tip:"§4.4. Si f es analítica en |z−z₀|<R, entonces f(z) = Σ cₙ(z−z₀)ⁿ con cₙ = f⁽ⁿ⁾(z₀)/n!",tags:["teoria","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Ejercicios: series de Taylor de funciones complejas",tip:"Desarrollar eᶻ, sin z, cos z, 1/(1−z) en serie de Taylor alrededor de distintos puntos.",tags:["practica","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ceros de funciones analíticas: orden y multiplicidad",tip:"§4.5. z₀ es cero de orden m si f(z₀)=...=f⁽ᵐ⁻¹⁾(z₀)=0 y f⁽ᵐ⁾(z₀)≠0.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Serie de Laurent: parte analítica y parte principal",tip:"§4.6. f(z) = Σ aₙ(z−z₀)ⁿ (n desde −∞). La parte principal determina el tipo de singularidad.",tags:["teoria","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Cálculo de series de Laurent en anillos",tip:"§4.6. Descomponer f usando fracciones parciales o series geométricas en cada anillo.",tags:["teoria","practica","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios: series de Laurent en distintas regiones",tip:"La serie de Laurent cambia según el anillo de convergencia — hacer al menos 5 ejercicios.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Actividades resueltas cap. 4 — §4.7",tip:"Resolver los ejemplos guiados de series de Laurent del libro.",tags:["practica","repaso"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Singularidades aisladas: clasificación",tip:"§5.1–5.2. Evitable (parte principal = 0), polo de orden m, esencial (infinitos términos negativos).",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Criterios para clasificar singularidades",tip:"§5.2. Polo de orden m ⟺ lím|f(z)|·|z−z₀|ᵐ es finito y no nulo.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: clasificación de singularidades",tip:"Clasificar las singularidades de 10 funciones variadas.",tags:["practica","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Residuos: definición y fórmulas para polos",tip:"§5.3. Res(f,z₀) = a₋₁ de la serie de Laurent. Para polo simple: lím(z−z₀)f(z). Para polo m: derivada.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Teorema de los residuos",tip:"§5.3. ∮f dz = 2πi·Σ Res(f,zₖ) — la herramienta de integración más poderosa de la materia.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: cálculo de residuos y aplicación del teorema",tip:"Calcular residuos en polos simples, dobles y de orden mayor.",tags:["practica","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro Laurent + singularidades + residuos",tip:"5 ejercicios: hallar Laurent, clasificar singularidades, calcular residuos, aplicar teorema.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Repaso caps. 4 y 5 + corrección de errores",tip:"Reforzar los tipos de singularidades y las fórmulas de residuos.",tags:["repaso"]},
+      ]},
+    ]
+  },
+  {
+    num:4, color:"#7F77DD", bg:"#EEEDFE",
+    titulo:"Integrales reales por residuos + inicio Fourier",
+    cap:"Capítulo 5 §5.4 + inicio Capítulo 6",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Cálculo de integrales reales impropias con residuos",tip:"§5.4. ∫₋∞⁺∞ f(x)dx cerrando el contorno en el semiplano superior.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Integrales trigonométricas ∫₀²π R(cos θ, sin θ)dθ",tip:"§5.4. Sustituir z = e^(iθ) para convertir la integral en una integral de contorno.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: integrales reales por el método de residuos",tip:"Resolver al menos 8 integrales de cada tipo — es el tema más mecánico de la materia.",tags:["practica","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Integrales con senos y cosenos: Lema de Jordan",tip:"§5.4. Para ∫f(x)e^(iax)dx con a>0 — el lema justifica que la integral sobre el semicírculo → 0.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Ejercicios: integrales con exponenciales y Lema de Jordan",tip:"Calcular integrales del tipo ∫₋∞⁺∞ f(x)cos(ax)dx por residuos.",tags:["practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Actividades resueltas cap. 5 — §5.5",tip:"Resolver todos los ejemplos guiados del capítulo de residuos.",tags:["practica","repaso"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"De series de Fourier a la integral de Fourier",tip:"§6.1. Límite de la serie de Fourier cuando el período T→∞ da la integral de Fourier.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Transformada de Fourier: definición y pares de transformadas",tip:"§6.2. F(ω) = ∫₋∞⁺∞ f(t)e^(−iωt)dt. Conocer los pares básicos de memoria.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: cálculo de transformadas de Fourier",tip:"Calcular F(ω) para funciones de soporte compacto y para gaussianas.",tags:["practica","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Propiedades de la transformada de Fourier",tip:"§6.3. Linealidad, desplazamiento, modulación, derivada, integral — conocer todas de memoria.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"TF de funciones pares e impares: seno y coseno de Fourier",tip:"§6.4. Si f es par → coseno de Fourier. Si f es impar → seno de Fourier.",tags:["teoria"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: propiedades y transformadas de Fourier",tip:"Usar propiedades para calcular TF de funciones compuestas sin integrar directamente.",tags:["practica","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Convolución de funciones y teorema de convolución",tip:"§6.5. F{f*g} = F(ω)·G(ω) — clave para resolver EDPs y sistemas LTI.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Aplicación de la TF a ecuaciones diferenciales parciales",tip:"§6.6. Transformar la EDP en una EDO ordinaria en ω, resolver y antitransformar.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: EDP con transformada de Fourier",tip:"Resolver la ecuación de calor y de onda con condiciones iniciales.",tags:["practica","clave"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro: integrales por residuos + transformada de Fourier",tip:"4 ejercicios: 2 integrales reales por residuos + 2 TF con propiedades o EDPs.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Repaso caps. 5 y 6 inicio + corrección",tip:"Reforzar el Lema de Jordan y las propiedades de la TF.",tags:["repaso"]},
+      ]},
+    ]
+  },
+  {
+    num:5, color:"#BA7517", bg:"#FAEEDA",
+    titulo:"Transformada de Laplace + Repaso Final",
+    cap:"Capítulo 6 — §6.7 a §6.11",
+    dias:[
+      {dia:"Lunes", slots:[
+        {tiempo:"9:00–11:00",nombre:"TL bilateral y su relación con la transformada de Fourier",tip:"§6.7. La TL unilateral (t≥0) es el caso más práctico — concentrarse en esa.",tags:["teoria"]},
+        {tiempo:"11:00–13:00",nombre:"Transformada de Laplace unilateral: definición y región de convergencia",tip:"§6.8. L{f(t)} = ∫₀⁺∞ f(t)e^(−st)dt. Conocer la tabla de pares básicos.",tags:["teoria","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: cálculo directo de transformadas de Laplace",tip:"Calcular L{f} para exponenciales, senos, cosenos, polinomios y combinaciones.",tags:["practica","clave"]},
+      ]},
+      {dia:"Martes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Propiedades de la transformada de Laplace",tip:"§6.9. Linealidad, desplazamiento, derivada, integral, convolución, valor inicial y final.",tags:["teoria","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Transformada inversa de Laplace: fracciones parciales",tip:"§6.9. Descomponer F(s) en fracciones simples y antitransformar término a término.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: TL inversa con fracciones parciales",tip:"Resolver 8 ejercicios variados — polos simples, complejos conjugados y polos repetidos.",tags:["practica","clave"]},
+      ]},
+      {dia:"Miércoles", slots:[
+        {tiempo:"9:00–11:00",nombre:"Aplicación a EDOs: resolver con transformada de Laplace",tip:"§6.10. Transformar la EDO, despejar Y(s), antitransformar. El método más usado en ingeniería.",tags:["teoria","practica","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Aplicación a ecuaciones integro-diferenciales",tip:"§6.10. La TL convierte la ecuación integral en una ecuación algebraica en s.",tags:["teoria","practica","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Ejercicios: EDOs y ecuaciones integrodiferenciales con TL",tip:"Resolver 6 ejercicios completos con condiciones iniciales.",tags:["practica","clave"]},
+      ]},
+      {dia:"Jueves", slots:[
+        {tiempo:"9:00–11:00",nombre:"Actividades resueltas cap. 6 — §6.11",tip:"Resolver todos los ejemplos guiados del capítulo de transformadas.",tags:["practica","repaso"]},
+        {tiempo:"11:00–13:00",nombre:"Repaso general: variable compleja y analiticidad",tip:"Repasar: CR, funciones elementales, armónicas, mapeos conformes, Dirichlet.",tags:["repaso","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Repaso general: integración compleja y Cauchy",tip:"Repasar: parametrización, FIC, derivadas, Cauchy, Laurent, singularidades.",tags:["repaso","clave"]},
+      ]},
+      {dia:"Viernes", slots:[
+        {tiempo:"9:00–11:00",nombre:"Repaso general: residuos e integrales reales",tip:"Repasar: clasificar singularidades, calcular residuos, integrales impropias, Lema de Jordan.",tags:["repaso","clave"]},
+        {tiempo:"11:00–13:00",nombre:"Repaso general: Fourier y Laplace",tip:"Repasar: pares de TF y TL, propiedades, convolución, EDPs y EDOs.",tags:["repaso","clave"]},
+        {tiempo:"13:00–14:00",nombre:"Hoja de fórmulas clave + organización del simulacro",tip:"Armar una hoja resumen con las 20 fórmulas más importantes de la materia.",tags:["repaso"]},
+      ]},
+      {dia:"Sábado", slots:[
+        {tiempo:"9:00–12:00",nombre:"Simulacro final tipo parcial completo",tip:"3 horas sin notas: 1 ej. variable compleja + 1 ej. Cauchy/residuos + 1 ej. Fourier/Laplace.",tags:["practica","repaso","clave"]},
+        {tiempo:"12:00–14:00",nombre:"Corrección final y cierre de la materia",tip:"Revisar errores del simulacro. Reforzar los 2 temas con más fallas.",tags:["repaso"]},
+      ]},
+    ]
+  }
+];
+
+const container = document.getElementById("semanas");
+
+semanas.forEach((s,i) => {
+  const sep = document.createElement("div");
+  sep.className = "cap-sep";
+  sep.textContent = s.cap;
+  container.appendChild(sep);
+
+  const card = document.createElement("div");
+  card.className = "semana-card";
+
+  const header = document.createElement("div");
+  header.className = "semana-header";
+  header.innerHTML = `
+    <span class="semana-badge" style="background:${s.bg};color:${s.color}">Semana ${s.num}</span>
+    <span class="semana-title">${s.titulo}</span>
+    <span class="semana-sub">~35 hs</span>
+    <span class="chevron" id="chev${i}">▶</span>
+  `;
+
+  const body = document.createElement("div");
+  body.className = "semana-body";
+
+  s.dias.forEach(d => {
+    const diaBlock = document.createElement("div");
+    diaBlock.className = "dia-block";
+    const diaH = document.createElement("div");
+    diaH.className = "dia-header";
+    diaH.innerHTML = `<span class="dia-label">${d.dia}</span><span class="dia-horas">5 hs</span>`;
+    diaBlock.appendChild(diaH);
+    d.slots.forEach(sl => {
+      const row = document.createElement("div");
+      row.className = "slot-row";
+      const tagsHtml = sl.tags.map(t => `<span class="tag tag-${t}">${t==="clave"?"⚠ clave":t}</span>`).join("");
+      row.innerHTML = `
+        <span class="slot-tiempo">${sl.tiempo}</span>
+        <div class="slot-content">
+          <div class="slot-nombre">${sl.nombre}</div>
+          <div class="slot-tip">${sl.tip}</div>
+          ${tagsHtml}
+        </div>
+      `;
+      diaBlock.appendChild(row);
+    });
+    body.appendChild(diaBlock);
+  });
+
+  header.addEventListener("click", () => {
+    const isOpen = body.classList.contains("open");
+    body.classList.toggle("open", !isOpen);
+    document.getElementById("chev"+i).classList.toggle("open", !isOpen);
+  });
+
+  card.appendChild(header);
+  card.appendChild(body);
+  container.appendChild(card);
+
+  if(i===0){ body.classList.add("open"); document.getElementById("chev0").classList.add("open"); }
+});
+
+</script>
