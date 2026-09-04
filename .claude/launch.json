@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "workspace-app",
-      "runtimeExecutable": "C:\\Users\\RimyAlbertOrtega\\Documents\\Proyectos\\ingenieria-aeroespacial\\dev-workspace-app.cmd",
-      "runtimeArgs": [],
-      "port": 5173
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8777", "--bind", "127.0.0.1"],
+      "port": 8777
     }
   ]
 }
