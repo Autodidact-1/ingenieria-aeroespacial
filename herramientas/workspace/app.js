@@ -90,7 +90,9 @@ const I = {
   pin:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 3.6h5.6l-.75 5.4 2.95 2.6v1.7H7v-1.7l2.95-2.6-.75-5.4z"/><path d="M12 13.3V20.4"/></svg>',
   pinOn:   '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 3.6h5.6l-.75 5.4 2.95 2.6v1.7H7v-1.7l2.95-2.6-.75-5.4z"/><path d="M12 13.3V20.4" fill="none"/></svg>',
   check:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>',
-  search:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>'
+  search:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>',
+  gridView:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.2"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.2"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.2"/></svg>',
+  listView:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M8.2 6h12.3M8.2 12h12.3M8.2 18h12.3"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>'
 };
 const fileIcon = name => ({
   pdf: I.fpdf, md: I.fmd, latex: I.ftex, notebook: I.fnb,
@@ -1110,7 +1112,7 @@ function renderViewport() {
     dashboard: viewDashboard,
     file: viewFile, files: viewFiles, correl: viewCorrel, todos: viewTodos,
     maps: viewMaps, library: viewLibrary,
-    config: viewConfig, subject: viewSubject, quiz: viewQuiz
+    config: viewConfig, subject: viewSubject, quiz: viewQuiz, book: viewBook
   })[t.kind](vp, t);
   renderStatus();
 }
@@ -2186,8 +2188,8 @@ async function scanMaps() {
 
 /* --- 7j. Librería --- */
 
-function bookCard(r, extra) {
-  const c = el('div', 'card flat');
+function bookCard(r, extra, mode) {
+  const c = el('div', 'card flat' + (mode === 'list' ? ' book-row' : ''));
   const area = AREAS[r.area];
   c.innerHTML = `<div class="book">
       <div class="book-cover">${r.cover ? `<img src="${r.cover}" alt="">` : I.book}</div>
@@ -2203,9 +2205,193 @@ function bookCard(r, extra) {
     ${r.note ? `<div style="font-size:12px;color:var(--ink-muted);margin-top:10px;line-height:1.55">${esc(r.note)}</div>` : ''}`;
   (r.codes || []).forEach(code => {
     const p = $$('.pill', c).find(x => x.textContent === code);
-    if (p) { p.style.cursor = 'pointer'; p.onclick = () => openSubject(code); }
+    if (p) { p.style.cursor = 'pointer'; p.onclick = e => { e.stopPropagation(); openSubject(code); }; }
   });
+  $$('a', c).forEach(a => a.onclick = e => e.stopPropagation());
+  c.style.cursor = 'pointer';
+  c.onclick = () => openBook({
+    id: r.id || 'rec:' + r.title,
+    source: r.source || 'recommended',
+    title: r.title, author: r.author, note: r.note, area: r.area,
+    codes: r.codes, cover: r.cover, olUrl: r.olUrl
+  }, state.current);
   return c;
+}
+
+/* Categoría de cada libro local: la elegís vos a mano desde el
+   desplegable de su tarjeta; se guarda por ruta de archivo. */
+function getLibCat(path) {
+  return LS.get('libCats', {})[path] || 'NONE';
+}
+function setLibCat(path, cat) {
+  const m = LS.get('libCats', {});
+  if (cat === 'NONE') delete m[path]; else m[path] = cat;
+  LS.set('libCats', m);
+}
+
+/* Descripción manual por libro local, en Markdown, escrita a mano
+   desde la ficha del libro (no hay forma de extraerla del PDF/epub). */
+function getLibDesc(path) {
+  return LS.get('libDescs', {})[path] || '';
+}
+function setLibDesc(path, text) {
+  const m = LS.get('libDescs', {});
+  if (!text.trim()) delete m[path]; else m[path] = text;
+  LS.set('libDescs', m);
+}
+
+function localBookCard(b, mode, sub) {
+  const cat = getLibCat(b.path);
+  const catDef = LIB_CATEGORIES[cat] || LIB_CATEGORIES.NONE;
+  const catPill = `<span class="pill" style="border-color:${catDef.color};color:${catDef.color}">${esc(catDef.label)}</span>`;
+  const subtitle = sub !== undefined ? sub : b.folder;
+  const c = el('div', 'card' + (mode === 'list' ? ' book-row' : ' book-vert-card'));
+  c.innerHTML = mode === 'list'
+    ? `<div class="book">
+        <div class="book-cover">${I.book}</div>
+        <div class="book-info">
+          <div class="book-title">${esc(b.name)}</div>
+          <div class="book-author">${subtitle ? esc(subtitle) : '—'}</div>
+          <div class="book-tags">${catPill}<span class="pill">${extOf(b.name).toUpperCase()}</span></div>
+        </div></div>`
+    : `<div class="book-vert">
+        <div class="book-cover">${I.book}</div>
+        <div class="book-title">${esc(b.name)}</div>
+        <div class="book-author">${subtitle ? esc(subtitle) : '—'}</div>
+        <div class="book-tags">${catPill}<span class="pill">${extOf(b.name).toUpperCase()}</span></div>
+      </div>`;
+  c.onclick = () => openBook({
+    id: 'local:' + b.path, source: 'local', title: b.name, folder: b.folder, path: b.path
+  }, state.current);
+  return c;
+}
+
+/* Ficha de libro: el mismo mecanismo que «abrir una materia» desde la Red
+   (openSubject → openTab kind:'subject'), pero para libros. El clic en una
+   tarjeta ya no abre el archivo directo: entra a esta ficha, y desde ahí
+   se decide si se lee adentro, afuera, o se sigue a la materia relacionada. */
+function openBook(book, back) {
+  openTab({ id: book.id, title: book.title, kind: 'book', book, back });
+}
+
+function viewBook(vp, t) {
+  const b = t.book;
+  const pane = el('div', 'pane');
+
+  if (b.source === 'local') {
+    const cat = getLibCat(b.path);
+    const catDef = LIB_CATEGORIES[cat] || LIB_CATEGORIES.NONE;
+    pane.innerHTML = `
+      <div class="pane-head">
+        <div>
+          <div style="font-family:var(--mono);font-size:11.5px;color:var(--ink-dim);
+            display:flex;gap:9px;align-items:center;margin-bottom:6px">
+            <span class="pill" style="border-color:${catDef.color};color:${catDef.color}">${esc(catDef.label)}</span>
+            <span class="pill">${extOf(b.path).toUpperCase()}</span>
+          </div>
+          <h1>${esc(b.title)}</h1>
+          <p class="lead">${b.folder ? esc(b.folder) : 'Librería'} ·
+            <span style="font-family:var(--mono);font-size:12px">${esc(b.path)}</span></p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select class="ctl" id="book-cat">
+            ${Object.entries(LIB_CATEGORIES).map(([k, a]) =>
+              `<option value="${k}" ${k === cat ? 'selected' : ''}>${esc(a.label)}</option>`).join('')}
+          </select>
+          <button class="btn primary" id="book-open">Ver aquí</button>
+          <a class="btn" href="${urlFor(b.path)}" target="_blank">Abrir afuera ${I.ext}</a>
+        </div>
+      </div>
+
+      <div class="section-title">Descripción</div>
+      <div class="book-desc-wrap">
+        <div class="book-desc-content" id="book-desc"></div>
+        <div class="book-desc-side" id="book-desc-actions"></div>
+      </div>`;
+    vp.appendChild(pane);
+    pane.querySelector('#book-cat').onchange = e => setLibCat(b.path, e.target.value);
+    pane.querySelector('#book-open').onclick = () => openFile(b.path);
+
+    const descBox = pane.querySelector('#book-desc');
+    const descActions = pane.querySelector('#book-desc-actions');
+    const renderDescView = () => {
+      const desc = getLibDesc(b.path);
+      descBox.className = 'book-desc-content' + (desc ? '' : ' is-empty');
+      descBox.innerHTML = desc ? mdToHtml(desc)
+        : 'Sin descripción todavía. Agregá una nota en formato Markdown — tuya, no la de la contratapa.';
+      descActions.innerHTML = `<a class="book-desc-link" id="book-desc-edit">${desc ? 'Editar' : 'Agregar'} descripción</a>`;
+      descActions.querySelector('#book-desc-edit').onclick = renderDescEdit;
+    };
+    const renderDescEdit = () => {
+      const desc = getLibDesc(b.path);
+      descBox.className = 'book-desc-content';
+      descBox.innerHTML = `<textarea class="ctl book-desc-ta" id="book-desc-ta"
+        style="width:100%;min-height:180px;font-family:var(--mono);font-size:13px;resize:vertical"
+        placeholder="Notas en Markdown: de qué trata, por qué lo guardaste, qué capítulos importan...">${esc(desc)}</textarea>`;
+      descActions.innerHTML = `<a class="book-desc-link primary" id="book-desc-save">Guardar</a>
+        <a class="book-desc-link" id="book-desc-cancel">Cancelar</a>`;
+      descActions.querySelector('#book-desc-save').onclick = () => {
+        setLibDesc(b.path, pane.querySelector('#book-desc-ta').value);
+        renderDescView();
+      };
+      descActions.querySelector('#book-desc-cancel').onclick = renderDescView;
+    };
+    renderDescView();
+    return;
+  }
+
+  const area = AREAS[b.area];
+  pane.innerHTML = `
+    <div class="pane-head">
+      <div>
+        ${area ? `<div style="margin-bottom:6px"><span class="pill" style="border-color:${area.color};color:${area.color}">${esc(area.label)}</span></div>` : ''}
+        <h1>${esc(b.title)}</h1>
+        <p class="lead">${esc(b.author || '—')}</p>
+      </div>
+      ${b.cover ? `<div class="book-cover" style="width:100px;height:140px;flex:none"><img src="${b.cover}" alt=""></div>` : ''}
+    </div>
+
+    ${b.note ? `<div class="section-title">Nota</div><div class="card flat">${esc(b.note)}</div>` : ''}
+
+    ${(b.codes || []).length ? `<div class="section-title">Materias relacionadas</div>
+      <div class="grid g3" id="book-subjects"></div>` : ''}
+
+    <div style="margin-top:20px">
+      <a class="btn" target="_blank" href="${b.olUrl || 'https://openlibrary.org/search?q=' + encodeURIComponent(b.title + ' ' + (b.author || ''))}">
+        Buscar en Open Library ↗</a>
+    </div>`;
+  vp.appendChild(pane);
+
+  if ((b.codes || []).length) {
+    const box = pane.querySelector('#book-subjects');
+    b.codes.forEach(code => {
+      const s = byCode[code];
+      if (!s) return;
+      const card = el('div', 'card flat');
+      card.style.cursor = 'pointer';
+      card.innerHTML = `<div class="c-code">${s.code}</div><div class="c-name">${esc(s.name)}</div>`;
+      card.onclick = () => openSubject(code, t);
+      box.appendChild(card);
+    });
+  }
+}
+
+/* Botonera de vista (cuadrícula de 5 columnas / lista horizontal),
+   compartida por «Mis libros locales» y «Recomendados». */
+function mkViewToggle(host, key, onChange) {
+  const wrap = el('div', 'view-toggle');
+  const render = () => {
+    wrap.innerHTML = '';
+    const mode = LS.get(key, 'grid');
+    [['grid', I.gridView, 'Cuadrícula'], ['list', I.listView, 'Lista']].forEach(([m, ico, tit]) => {
+      const b = el('button', 'icon-btn' + (mode === m ? ' on' : ''), ico);
+      b.title = tit;
+      b.onclick = () => { LS.set(key, m); render(); onChange(m); };
+      wrap.appendChild(b);
+    });
+  };
+  render();
+  host.appendChild(wrap);
 }
 
 function viewLibrary(vp, t) {
@@ -2224,13 +2410,22 @@ function viewLibrary(vp, t) {
     </div>
     <div id="results"></div>
 
-    <div class="section-title">Mis libros locales
-      <button class="btn" id="rescan" style="margin-left:auto">Reindexar</button></div>
-    <div class="grid g3" id="local"></div>
+    <div class="section-title">Mis libros locales</div>
+    <div class="lib-toolbar">
+      <div class="chipbar" id="localFilters"></div>
+      <div class="toolbar-right">
+        <div id="localViewToggle"></div>
+        <button class="btn" id="rescan">Reindexar</button>
+      </div>
+    </div>
+    <div id="local"></div>
 
     <div class="section-title">Recomendados</div>
-    <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px" id="filters"></div>
-    <div class="grid g3" id="recs"></div>`;
+    <div class="lib-toolbar">
+      <div class="chipbar" id="filters"></div>
+      <div class="toolbar-right"><div id="recViewToggle"></div></div>
+    </div>
+    <div class="grid g5" id="recs"></div>`;
   vp.appendChild(pane);
 
   /* --- búsqueda web --- */
@@ -2251,8 +2446,9 @@ function viewLibrary(vp, t) {
           title: d.title,
           author: (d.author_name || []).slice(0, 2).join(', '),
           cover: d.cover_i ? `https://covers.openlibrary.org/b/id/${d.cover_i}-S.jpg` : null,
-          note: d.first_publish_year ? 'Primera edición ' + d.first_publish_year : ''
-        }, `<a class="pill" href="https://openlibrary.org${d.key}" target="_blank">Open Library ↗</a>`);
+          note: d.first_publish_year ? 'Primera edición ' + d.first_publish_year : '',
+          source: 'openlibrary', id: 'ol:' + d.key, olUrl: 'https://openlibrary.org' + d.key
+        });
         grid.appendChild(card);
       });
       results.innerHTML = '';
@@ -2267,7 +2463,10 @@ function viewLibrary(vp, t) {
 
   /* --- libros locales --- */
   const local = pane.querySelector('#local');
+  const localFilters = pane.querySelector('#localFilters');
+  let localActive = null;
   const paintLocal = () => {
+    const mode = LS.get('libLocalView', 'grid');
     const idx = LS.get('libIndex', []);
     local.innerHTML = '';
     if (!idx.length) {
@@ -2277,28 +2476,51 @@ function viewLibrary(vp, t) {
         : '<div class="empty">Necesitás el servidor local para leer tus carpetas.</div>';
       return;
     }
-    idx.forEach(b => {
-      const c = el('div', 'card');
-      c.innerHTML = `<div class="book">
-          <div class="book-cover">${fileIcon(b.name)}</div>
-          <div class="book-info">
-            <div class="book-title">${esc(b.name)}</div>
-            ${b.folder ? `<div class="book-author">${esc(b.folder)}</div>` : ''}
-            <div class="book-tags"><span class="pill">${extOf(b.name).toUpperCase()}</span></div>
-          </div></div>`;
-      c.onclick = () => openFile(b.path);
-      local.appendChild(c);
+    const filtered = idx.filter(b => !localActive || getLibCat(b.path) === localActive);
+    if (!filtered.length) { local.innerHTML = '<div class="empty">Ningún libro en esta categoría todavía.</div>'; return; }
+
+    /* Se agrupa por la primera carpeta debajo de Librería/ (Libros, Cuardernillos,
+       etc.) en vez de mostrar todo en una sola grilla mezclada. */
+    const groups = new Map();
+    filtered.forEach(b => {
+      const top = b.folder ? b.folder.split('/')[0] : 'Sin carpeta';
+      if (!groups.has(top)) groups.set(top, []);
+      groups.get(top).push(b);
+    });
+    [...groups.keys()].sort((a, c) => a.localeCompare(c)).forEach(name => {
+      const books = groups.get(name);
+      const section = el('div', 'lib-group');
+      section.innerHTML = `<div class="lib-group-title">${esc(name)}<span class="pill">${books.length}</span></div>`;
+      const grid = el('div', 'grid ' + (mode === 'list' ? 'list' : 'g5'));
+      books.forEach(b => grid.appendChild(localBookCard(b, mode, b.folder.slice(name.length + 1))));
+      section.appendChild(grid);
+      local.appendChild(section);
     });
   };
+  const mkLocal = (label, key, color) => {
+    const b = el('button', 'pill' + (localActive === key ? ' on' : ''), label);
+    b.style.cssText = 'cursor:pointer;padding:5px 11px' + (color && localActive === key ? `;border-color:${color};color:${color}` : '');
+    b.onclick = () => { localActive = key; paintLocal(); paintLocalFilters(); };
+    localFilters.appendChild(b);
+  };
+  const paintLocalFilters = () => {
+    localFilters.innerHTML = '';
+    mkLocal('Todas', null);
+    Object.entries(LIB_CATEGORIES).forEach(([k, a]) => mkLocal(a.label, k, a.color));
+  };
+  mkViewToggle(pane.querySelector('#localViewToggle'), 'libLocalView', paintLocal);
   pane.querySelector('#rescan').onclick = () => scanLibrary().then(paintLocal);
-  paintLocal();
+  paintLocalFilters(); paintLocal();
+  if (state.online) scanLibrary({ silent:true }).then(paintLocal);
 
   /* --- recomendados con filtro por área --- */
   const recs = pane.querySelector('#recs'), filters = pane.querySelector('#filters');
   let active = t.focus || null;
   const paintRecs = () => {
+    const mode = LS.get('libRecView', 'grid');
+    recs.className = 'grid ' + (mode === 'list' ? 'list' : 'g5');
     recs.innerHTML = '';
-    RECOMMENDED.filter(r => !active || r.area === active).forEach(r => recs.appendChild(bookCard(r)));
+    RECOMMENDED.filter(r => !active || r.area === active).forEach(r => recs.appendChild(bookCard(r, null, mode)));
   };
   const mk = (label, key, color) => {
     const b = el('button', 'pill' + (active === key ? ' on' : ''), label);
@@ -2311,12 +2533,34 @@ function viewLibrary(vp, t) {
     mk('Todas', null);
     Object.entries(AREAS).forEach(([k, a]) => mk(a.label, k, a.color));
   };
+  mkViewToggle(pane.querySelector('#recViewToggle'), 'libRecView', paintRecs);
   paintFilters(); paintRecs();
 }
 
-async function scanLibrary() {
-  if (!state.online) { toast('Necesitás el servidor local para indexar'); return; }
-  toast('Indexando la carpeta Librería…');
+let libScanInFlight = null;
+
+/* Dos escaneos a la vez (el silencioso al abrir la vista y un clic en
+   «Reindexar») no deben pisarse: si ya hay uno corriendo, todos esperan
+   ese mismo resultado en vez de disparar otro. */
+async function scanLibrary(opts) {
+  const silent = opts && opts.silent;
+  if (!state.online) { if (!silent) toast('Necesitás el servidor local para indexar'); return LS.get('libIndex', []); }
+  if (libScanInFlight) return libScanInFlight;
+  libScanInFlight = scanLibraryNow(silent).finally(() => { libScanInFlight = null; });
+  return libScanInFlight;
+}
+
+async function scanLibraryNow(silent) {
+  if (!silent) toast('Indexando la carpeta Librería…');
+  /* Si la carpeta raíz no se puede leer (hiccup del servidor, ruta movida),
+     no pisamos el índice anterior con uno vacío: lo dejamos como está. */
+  try {
+    const res = await fetch(urlFor(LIBRARY_DIR + '/'), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+  } catch (e) {
+    if (!silent) toast(`No pude leer ${LIBRARY_DIR}/ (${e.message}). Dejé el índice anterior.`);
+    return LS.get('libIndex', []);
+  }
   const EXTS = ['pdf', 'tex', 'epub', 'djvu'];
   const out = [];
   /* La carpeta puede tener subcarpetas propias; se recorren hasta 3 niveles. */
@@ -2332,7 +2576,7 @@ async function scanLibrary() {
   await walk(LIBRARY_DIR, 0);
   LS.set('libIndex', out);
   buildSearchIndex();
-  toast(out.length ? `${out.length} libros indexados` : 'La carpeta Librería está vacía');
+  if (!silent) toast(out.length ? `${out.length} libros indexados` : 'La carpeta Librería está vacía');
   return out;
 }
 

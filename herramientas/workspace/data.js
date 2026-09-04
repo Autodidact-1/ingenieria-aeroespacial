@@ -26,6 +26,10 @@ const AREAS = {
   GES: { label: "Gestión y Profesión",   color: "#FF37B0" }   // magenta
 };
 
+/* Categorías para "Mis libros locales": las mismas áreas del mapa de
+   materias, más una categoría neutra para lo que todavía no clasificaste. */
+const LIB_CATEGORIES = { ...AREAS, NONE: { label: "Sin categoría", color: "#8A8F98" } };
+
 /* ============================================================
    Temas de color. Cada `id` corresponde a un bloque
    html[data-theme="..."] en index.html; `prev` son los colores
@@ -218,7 +222,6 @@ const LIBRARY_DIR = "Asignaturas/Libreria";
 
 /* Subcarpetas estándar dentro de cada asignatura */
 const SUBFOLDERS = [
-  { key:"material", label:"material", hint:"Libros, PDF y fuentes LaTeX" },
   { key:"apuntes",  label:"apuntes",  hint:"Apuntes propios, Markdown y mapas" },
   { key:"practica", label:"practica", hint:"Ejercicios, TP y notebooks" }
 ];
